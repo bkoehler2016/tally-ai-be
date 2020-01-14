@@ -6,9 +6,11 @@ const knex = require("knex")({
     password: process.env.DB_PW,
     database: process.env.DATABASE,
     options: {
-      port: process.env.PORT
+      port: process.env.DB_PORT
     }
   }
 });
 
 const knexConfig = require("../knexfile.js");
+
+module.exports = knex(knexConfig.staging)
