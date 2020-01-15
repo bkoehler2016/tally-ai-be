@@ -22,8 +22,8 @@
 - POST /auth/login
 
 ### Users
-- GET /users/:id -done
-- POST /users/:id/business -done... i think
-- PUT /users/:id -done
-- DELETE /users/:id -done
-- DELETE /users/:id/business -done
+- GET /users/:id
+- POST /users/:id/business
+- PUT /users/:id
+- DELETE /users/:id
+- DELETE /users/:id/business
