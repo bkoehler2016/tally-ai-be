@@ -18,4 +18,8 @@ server.use(express.json());
 server.use("/api/auth", authRouter);
 server.use("/api/users", authMiddleware, usersRouter);
 
+server.get('/', (req, res) => {
+    res.status(200).json(`Sanity Check`);
+});
+
 module.exports = server;
