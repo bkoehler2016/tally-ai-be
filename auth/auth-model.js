@@ -10,7 +10,11 @@ module.exports = {
 
 // A lot of this will actually be handled in users-model.js
 
-async function insert(user) {}
+async function insert(user) {
+  const [id] = await db("users").insert(user);
+//   const added = findById(id);
+//   return added;
+}
 
 function find() {
   return db("users").select("id", "email", "password", "preferences");
