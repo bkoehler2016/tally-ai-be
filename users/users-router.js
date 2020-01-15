@@ -39,4 +39,45 @@ router.delete("/:id", (req, res) => {
     });
 });
 
+// GET USERS
+
+router.get("/:id", (req,res) => {
+  Users.getUsers()
+  .then(user => {
+    res.json(user);
+  })
+  .catch(err => res.send(err));
+});
+
+// POST /users/:id/business
+
+router.post("/:id/business", (req, res) => {
+  req.body.id = req.params.id // maybe it's req.body.user.id not 100% sure
+  Users.insertBusiness(req.body)
+  .then(event => {
+    res.status(201).json({...event, message: "user business posted"})
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(500).json({...err, message: "user business failed to post"})
+})
+});
+
+// DELETE /users/:id/business
+
+router.delete("./:id/business", (req, res) => {
+  Users.destroy(req.params.id)
+  .then(event => {
+    if (!event) {
+      res.status(404).json({message: " No event exists by that ID!"})
+  } else {
+      res.status(200).json({message: "deleted"})
+  }
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(500).json(err)
+})
+});
+
 module.exports = router;
