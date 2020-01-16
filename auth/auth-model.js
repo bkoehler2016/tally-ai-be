@@ -2,18 +2,18 @@ const db = require("../database/dbConfig.js");
 
 module.exports = {
   insert,
-  //   addUser,
+  addUser,
   find,
   findBy,
   findById
 };
 
-// A lot of this will actually be handled in users-model.js
+// A lot of this will actually be handled in users-model.js (maybe)
 
 async function insert(user) {
   const [id] = await db("users").insert(user);
-//   const added = findById(id);
-//   return added;
+  //   const added = findById(id);
+  //   return added;
 }
 
 function find() {
@@ -30,8 +30,8 @@ function findById(id) {
     .first();
 }
 
-// async function addUser(user) {
-//   const [id] = await db("users").insert(user);
-//   const added = findById(id);
-//   return added;
-// }
+async function addUser(user) {
+  const [id] = await db("users").insert(user);
+  const added = findById(id);
+  return added;
+}
