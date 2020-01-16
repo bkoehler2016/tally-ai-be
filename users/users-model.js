@@ -1,6 +1,12 @@
 const db = require('../database/dbConfig')
 
-module.exports
+module.exports = {
+    getUsers,
+    findByBusinessID,
+    insertBusiness,
+    update,
+    destroy
+}
 
 function getUsers() {
     return db('users_businesses')
