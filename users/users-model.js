@@ -9,8 +9,8 @@ module.exports = {
 };
 
 async function getUsers(id) {
-  const {...rest, business_id} =  db("users as u")
-    
+  const { business_id, ...rest } = db("users as u")
+
     .join("users_businesses as ub", "ub.user_id", "=", "u.id")
     .join("businesses as b", "b.id", "=", "ub.business_id")
     .where("u.id", "=", { id });
