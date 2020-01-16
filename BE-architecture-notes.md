@@ -74,7 +74,7 @@ Res:
     {
         "first_name": string,
         "last_name": string,
-        "business": [
+        "businesses": [
             {
                 "id": integer,
                 "name": string,
@@ -100,18 +100,23 @@ Req:
 
 ```
     {
-        "business": {
-            "name": string,
-            "location": {
-                "city": string,
-                "state": string
-            }
-        },
-        "yelp": {
-                "yelp_id": string,
-                "url": string,
-                "image_url": string
-        }
+        "businesses": [
+            {
+                "id": integer,
+                "name": string,
+                "location": {
+                    "city": string,
+                    "state": string
+                }
+                "yelp": {
+                    "id": string,
+                    "yelp_id": string,
+                    "url": string,
+                    "image_url": string
+                }
+            },
+            ...
+        ]
     }
 ```
 
@@ -150,7 +155,7 @@ Res:
     {
         "first_name": string,
         "last_name": string,
-        "business": [
+        "businesses": [
             {
                 "id": integer,
                 "name": string,
