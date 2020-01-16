@@ -3,7 +3,7 @@
 - "users"
 - "users_businesses"
 - "yelp"
-- "buesinesses"
+- "businesses"
 
 ## Routers
 
