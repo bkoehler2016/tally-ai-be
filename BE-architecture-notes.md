@@ -32,7 +32,7 @@
         "email": string,
         "password": string - 8 or more characters,
         "first_name": string,
-        "last_name": string,
+        "last_name": string
     }
 ```
 
@@ -40,7 +40,7 @@ Res:
 
 ```
     {
-        "user_id": integer,
+        "user_id": integer
     }
 ```
 
@@ -50,7 +50,7 @@ Res:
 ```
     {
         "email": string,
-        "password": string - 8 or more characters,
+        "password": string - 8 or more characters
     }
 ```
 
@@ -58,7 +58,7 @@ Res:
 
 ```
     {
-        "user_id": integer,
+        "user_id": integers
     }
 ```
 
@@ -71,20 +71,23 @@ Res:
     {
         "first_name": string,
         "last_name": string,
-        "business": {
-            "id": integer,
-            "name": string,
-            "location": {
-                "city": string,
-                "state": string
-            }
-            "yelp": {
-                "id": string,
-                "yelp_id": string,
-                "url": string,
-                "image_url": string
-            }
-        }
+        "business": [
+            {
+                "id": integer,
+                "name": string,
+                "location": {
+                    "city": string,
+                    "state": string
+                }
+                "yelp": {
+                    "id": string,
+                    "yelp_id": string,
+                    "url": string,
+                    "image_url": string
+                }
+            },
+            ...
+        ]
     }
 ```
 
@@ -108,7 +111,7 @@ Res:
     }
 ```
 
-NOTE: We will insert the business first, then get back the business id, put that into the yelp object, and then insert that object into the yelp table. (because business_id is a foreign key)
+NOTE: We will insert the business first, then get back the business id, put that into the yelp object, and then insert that object into the yelp table. (because business_id is a foreign key) Then we will create an entry in "users_businesses" connecting the two, using the :id and the business id.
 
 Res:
 
@@ -122,5 +125,96 @@ Res:
 NOTE: These are the IDs for the rows in the "businesses" and "yelp" tables, respectively.
 
 - PUT /users/:id -DONE
+  Req:
+
+```
+    {
+        "email": string (optional),
+        "password": string (8 or more characters, optional),
+        "first_name": string (optional),
+        "last_name": string (optional),
+        "preferences": {
+            "widgets": array (optional)
+        }
+    }
+```
+
+Res:
+
+```
+    {
+        "first_name": string,
+        "last_name": string,
+        "business": [
+            {
+                "id": integer,
+                "name": string,
+                "location": {
+                    "city": string,
+                    "state": string
+                }
+                "yelp": {
+                    "id": string,
+                    "yelp_id": string,
+                    "url": string,
+                    "image_url": string
+                }
+            },
+            ...
+        ]
+    }
+```
+
 - DELETE /users/:id -DONE
-- DELETE /users/:id/business
+  Res:
+
+```
+    {
+        "first_name": string,
+        "last_name": string,
+        "businesses": [
+            {
+                "id": integer,
+                "name": string,
+                "location": {
+                    "city": string,
+                    "state": string
+                }
+                "yelp": {
+                    "id": string,
+                    "yelp_id": string,
+                    "url": string,
+                    "image_url": string
+                }
+            },
+            ...
+        ]
+    }
+```
+
+- DELETE /users/:id/business/:business_id
+  Res:
+
+```
+    {
+        "businesses": [
+            {
+                "id": integer,
+                "name": string,
+                "location": {
+                    "city": string,
+                    "state": string
+                }
+                "yelp": {
+                    "id": string,
+                    "yelp_id": string,
+                    "url": string,
+                    "image_url": string
+                }
+            },
+            ...
+        ]
+    }
+```
+
+NOTE: Response gives the array of their businesses, now without the deleted business
