@@ -89,6 +89,38 @@ Res:
 ```
 
 - POST /users/:id/business -DONE
+  Req:
+
+```
+    {
+        "business": {
+            "name": string,
+            "location": {
+                "city": string,
+                "state": string
+            }
+        },
+        "yelp": {
+                "yelp_id": string,
+                "url": string,
+                "image_url": string
+        }
+    }
+```
+
+NOTE: We will insert the business first, then get back the business id, put that into the yelp object, and then insert that object into the yelp table. (because business_id is a foreign key)
+
+Res:
+
+```
+    {
+        "business_id": integer,
+        "yelp_id": integer
+    }
+```
+
+NOTE: These are the IDs for the rows in the "businesses" and "yelp" tables, respectively.
+
 - PUT /users/:id -DONE
 - DELETE /users/:id -DONE
 - DELETE /users/:id/business
