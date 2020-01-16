@@ -9,5 +9,5 @@ if (environment === "production") {
 } else if (environment === "staging") {
   module.exports = knex(knexConfig.staging);
 } else {
-  module.exports = knex(knexConfig.staging);
+  module.exports = knex(knexConfig.development);
 }
