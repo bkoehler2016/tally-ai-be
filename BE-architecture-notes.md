@@ -40,7 +40,7 @@ Res:
 
 ```
     {
-        "id": integer,
+        "user_id": integer,
     }
 ```
 
@@ -58,13 +58,35 @@ Res:
 
 ```
     {
-        "id": integer,
+        "user_id": integer,
     }
 ```
 
 ### Users
 
 - GET /users/:id -DONE
+  Res:
+
+```
+    {
+        "first_name": string,
+        "last_name": string,
+        "business": {
+            "id": integer,
+            "name": string,
+            "location": {
+                "city": string,
+                "state": string
+            }
+            "yelp": {
+                "id": string,
+                "yelp_id": string,
+                "url": string,
+                "image_url": string
+            }
+        }
+    }
+```
 
 - POST /users/:id/business -DONE
 - PUT /users/:id -DONE
