@@ -25,7 +25,7 @@
 ### Auth
 
 - POST /auth/register
-  Req:
+Req:
 
 ```
     {
@@ -45,7 +45,7 @@ Res:
 ```
 
 - POST /auth/login
-  Req:
+Req:
 
 ```
     {
@@ -65,7 +65,7 @@ Res:
 ### Users
 
 - GET /users/:id -DONE
-  Res:
+Res:
 
 ```
     {
@@ -92,7 +92,7 @@ Res:
 ```
 
 - POST /users/:id/business -DONE
-  Req:
+Req:
 
 ```
     {
@@ -125,7 +125,7 @@ Res:
 NOTE: These are the IDs for the rows in the "businesses" and "yelp" tables, respectively.
 
 - PUT /users/:id -DONE
-  Req:
+Req:
 
 ```
     {
@@ -166,7 +166,7 @@ Res:
 ```
 
 - DELETE /users/:id -DONE
-  Res:
+Res:
 
 ```
     {
@@ -193,7 +193,7 @@ Res:
 ```
 
 - DELETE /users/:id/business/:business_id
-  Res:
+Res:
 
 ```
     {
