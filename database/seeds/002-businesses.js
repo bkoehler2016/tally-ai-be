@@ -14,7 +14,7 @@ exports.seed = function(knex) {
           name: 'La Gattara Cat Lounge and Boutique', 
           location: {
             city: 'Tempe',
-             state: 'AZ'
+            state: 'AZ'
             }
         },
       ]);
