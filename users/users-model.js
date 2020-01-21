@@ -29,16 +29,24 @@ async function insertBusiness(business) {
   // Separate yelp data from the rest of the business object
   const { yelp, ...rest } = business;
 
-  // Insert into businesses table
-  const [id] = await db('businesses').insert({ ...rest });
+  // Check if business already in the DB
+  const { yelp_id, business_id } = await db('yelp as y').select('y.id as yelp_id', 'y.business_id as business_id').where({ 'id': business.yelp.yelp_id });
 
-  // Insert into yelp table after adding business_id
-  const yelp_id = await db('yelp').insert({ ...yelp, business_id: id })
+  if (yelp_id) {
+    return ({ business_id, yelp_id });
+  } else {
+    // Insert into businesses table
+    const [id] = await db('businesses').insert({ ...rest });
 
-  // Insert into users_businesses table
-  await db('users_businesses').insert({ business_id: id, yelp_id })
+    // Insert into yelp table after adding business_id
+    const yelp_id = await db('yelp').insert({ ...yelp, business_id: id })
 
-  return ({ business_id: id, yelp_id });
+    // Insert into users_businesses table
+    await db('users_businesses').insert({ business_id: id, yelp_id })
+
+    return ({ business_id: id, yelp_id });
+  }
+
 }
 
 function update(id, changes) {
