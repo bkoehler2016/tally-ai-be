@@ -48,6 +48,7 @@ function update(id, changes) {
 }
 
 function destroy(id) {
+  // TODO: Also delete entry from users_businesses where user_id: id
   return db("users")
     .where("id", id)
     .del();

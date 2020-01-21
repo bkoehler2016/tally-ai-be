@@ -100,9 +100,8 @@ Req:
 
 ```
     {
-        "businesses": [
+        "business": [
             {
-                "id": integer,
                 "name": string,
                 "location": {
                     "city": string,

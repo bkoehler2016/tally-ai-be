@@ -1,6 +1,8 @@
 const formatUserData = data => ({
     first_name: data.first_name,
     last_name: data.last_name,
+    /* Once we set up the model to account for multiple businesses,
+        change the following to a map: */
     businesses: [
         {
             id: data.id,
