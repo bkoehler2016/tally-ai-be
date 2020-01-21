@@ -14,7 +14,8 @@ exports.up = function(knex) {
     .createTable("businesses", Businesses => {
       Businesses.increments();
       Businesses.string("name").notNullable();
-      Businesses.json("location").notNullable();
+      Businesses.string("city").notNullable();
+      Businesses.string("state").notNullable();
     })
     .createTable("users_businesses", UsersBusinesses => {
       UsersBusinesses.increments();
