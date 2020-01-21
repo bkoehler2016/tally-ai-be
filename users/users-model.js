@@ -14,7 +14,7 @@ function getUsers(id) {
     .join("businesses as b", "b.id", "ub.business_id")
     .join("yelp as y", "y.business_id", "b.id")
     .where({ "u.id": id })
-    .select("u.first_name", "u.last_name", "b.id", "b.name", "b.city", "b.state", "y.yelp_id", "y.url", "y.image_url")
+    .select("ub.user_id", "u.first_name", "u.last_name", "b.id", "b.name", "b.city", "b.state", "y.yelp_id", "y.url", "y.image_url")
     .first();
 }
 
