@@ -3,6 +3,7 @@ const express = require("express");
 const Users = require("./users-model");
 
 const router = express.Router();
+const helpers = require('./users_helpers');
 
 // CHANGE USER CREDENTIALS
 
@@ -41,48 +42,49 @@ router.delete("/:id", (req, res) => {
 
 // GET /users/:id
 
-router.get('/:id', (req,res) => {
-  const { id }  = req.params
+router.get('/:id', (req, res) => {
+  const { id } = req.params
   Users.getUsers(id)
-    .then(usersid => {
-      if(usersid){
-        res.status(200).json(usersid);
+    .then(data => {
+      if (data) {
+        console.log(helpers.formatUserData(data));
+        res.status(200).json(helpers.formatUserData(data));
       }
-      else{
-        res.status(404).json({message: `error retrieving the worker.`})
+      else {
+        res.status(404).json({ message: `error retrieving the worker.` })
       }
-      })
+    })
 });
 
 // POST /users/:id/business
 
-router.post('./:id', (req, res) => {
+router.post('/:id/business', (req, res) => {
   req.body.id = req.params.id
   Users.insertBusiness(req.body)
-  .then(event => {
-    res.status(201).json({...event, message: "User Business posted"})
-})
-.catch(err => {
-    console.log(err)
-    res.status(500).json({...err, message: "User Business failed to post"})
-})
+    .then(event => {
+      res.status(201).json({ ...event, message: "User Business posted" })
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({ ...err, message: "User Business failed to post" })
+    })
 })
 
 // DELETE /users/:id/business
 
 router.delete('/:id/business', (req, res) => {
   Users.destroy(req.params.id)
-  .then(event => {
+    .then(event => {
       if (!event) {
-          res.status(404).json({message: "No User Business exists by that ID!"})
+        res.status(404).json({ message: "No User Business exists by that ID!" })
       } else {
-          res.status(200).json({message: "User Business Deleted"})
+        res.status(200).json({ message: "User Business Deleted" })
       }
-  })
-  .catch(err => {
+    })
+    .catch(err => {
       console.log(err)
       res.status(500).json(err)
-  })
+    })
 });
 
 module.exports = router;

@@ -4,7 +4,7 @@ function find() {
   return db("users").select("id", "first_name", "last_name", "email", "password", "preferences");
 }
 
-function findBy(filter){
+function findBy(filter) {
   return db('users').where(filter);
 }
 
@@ -17,10 +17,10 @@ async function add(user) {
 
 function findByName(first_name) {
   return db('users')
-  .where({
-    first_name: first_name
-  })
-  .select("id", "email", "password", "preferences");
+    .where({
+      first_name: first_name
+    })
+    .select("id", "email", "password", "preferences");
 }
 
 function findById(id) {
@@ -31,16 +31,16 @@ function findById(id) {
 
 function remove(id) {
   return db('users')
-  .where({ id })
-  .first()
-  .del();
+    .where({ id })
+    .first()
+    .del();
 }
 
 module.exports = {
-    add,
-    find,
-    findBy,
-    findById,
-    findByName,
-    remove
+  add,
+  find,
+  findBy,
+  findById,
+  findByName,
+  remove
 }
