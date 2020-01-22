@@ -59,14 +59,27 @@ router.get('/:id', (req, res) => {
 // POST /users/:id/business
 
 router.post('/:id/business', (req, res) => {
-  req.body.id = req.params.id
-  Users.insertBusiness(req.body)
+  const id = req.params.id
+  Users.insertBusiness(req.body, id)
     .then(event => {
       res.status(201).json({ ...event, message: "User Business posted" })
     })
     .catch(err => {
       console.log(err)
       res.status(500).json({ ...err, message: "User Business failed to post" })
+    })
+})
+
+// Add favorite
+router.post('/:id/favorite', (req, res) => {
+  req.body.id = req.params.id
+  Users.insertFavorite(req.body)
+    .then(event => {
+      res.status(201).json({ ...event, message: "User Favorite posted" })
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({ ...err, message: "User Favorite failed to post" })
     })
 })
 
