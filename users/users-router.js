@@ -53,7 +53,7 @@ router.get('/:id', (req, res) => {
       else {
         res.status(404).json({ message: `error retrieving the worker.` })
       }
-    })
+    }).catch(error => res.status(404).json({ message: "Error fetching user data", error }));
 });
 
 // POST /users/:id/business
