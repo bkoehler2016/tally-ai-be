@@ -43,16 +43,7 @@ router.post("/register", (req, res) => {
 
   Users.add(user)
     .then(userN => {
-      const token = getJwtToken(userN);
-
-      for (let i = 0; i < userN.length; i++) {
-        if (userN[i].completed == 0) {
-          userN[i].completed = false
-        }
-        else {
-          userN[i].completed = true
-        }
-      }
+      const token = getJwtToken(userN.email, userN.password);
       res.status(200).json({ userN, token })
     })
     .catch(err => res.status(500).json('Unable to retrieve new user.'))
@@ -63,13 +54,13 @@ router.post("/register", (req, res) => {
 // });
 
 router.post("/login", (req, res) => {
-  let { first_name, password } = req.body;
+  let { email, password } = req.body;
 
-  Users.findBy({ first_name })
+  Users.findBy({ email })
     .then(user => {
       user = user[0];
       if (user && bcrypt.compareSync(password, user.password)) {
-        const token = getJwtToken(user);
+        const token = getJwtToken(user.email, user.password);
         res.status(200).json({
           message: `Welcome ${user.first_name}!`,
           id: user.id,
@@ -92,8 +83,6 @@ function getJwtToken(email, password) {
     email,
     password
   };
-
-
 
   const options = {
     expiresIn: "7d"
