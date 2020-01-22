@@ -46,27 +46,42 @@ router.get('/:id', (req, res) => {
   const { id } = req.params
   Users.getUsers(id)
     .then(data => {
-      if (data) {
-        console.log(helpers.formatUserData(data));
-        res.status(200).json(helpers.formatUserData(data));
-      }
-      else {
-        res.status(404).json({ message: `error retrieving the worker.` })
-      }
-    })
+      // if (data) {
+      // console.log("Data in users-router:\n", helpers.formatUserData(data));
+      const formatted = helpers.formatUserData(data);
+      console.log("Formatted Data in users-router:\n", formatted);
+      res.status(200).json(formatted);
+      // }
+      // else {
+      //   res.status(404).json({ message: `error retrieving the worker.` })
+      // }
+    }).catch(error => res.status(404).json({ message: "Error fetching user data", error }));
 });
 
 // POST /users/:id/business
 
 router.post('/:id/business', (req, res) => {
-  req.body.id = req.params.id
-  Users.insertBusiness(req.body)
+  const id = req.params.id
+  Users.insertBusiness(req.body, id)
     .then(event => {
-      res.status(201).json({ ...event, message: "User Business posted" })
+      res.status(201).json({ event, message: "User Business posted" })
     })
     .catch(err => {
       console.log(err)
-      res.status(500).json({ ...err, message: "User Business failed to post" })
+      res.status(500).json({ err, message: "User Business failed to post" })
+    })
+})
+
+// Add favorite
+router.post('/:id/favorite', (req, res) => {
+  const id = req.params.id
+  Users.insertFavorite(req.body, id)
+    .then(event => {
+      res.status(201).json({ event, message: "User Favorite posted" })
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({ err, message: "User Favorite failed to post" })
     })
 })
 

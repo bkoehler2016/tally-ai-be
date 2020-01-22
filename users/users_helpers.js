@@ -1,20 +1,41 @@
-const formatUserData = data => ({
-    first_name: data.first_name,
-    last_name: data.last_name,
-    businesses: [
-        {
-            id: data.id,
-            name: data.name,
-            city: data.city,
-            state: data.state,
+const formatUserData = data => {
+    console.log("Data in formatUserData:\n", data);
+
+    const formatted = {
+        user_id: data.user_id,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        /* Once we set up the model to account for multiple businesses,
+            change the following to a map: */
+        businesses: data.businesses.map(business => ({
+            id: business.id,
+            name: business.name,
+            city: business.city,
+            state: business.state,
             yelp: {
-                yelp_id: data.yelp_id,
-                url: data.url,
-                image_url: data.image_url
+                yelp_id: business.yelp_id,
+                url: business.url,
+                image_url: business.image_url
             }
-        }
-    ]
-})
+        })),
+        favorites: data.favorites.length
+            ? data.favorites.map(favorite => ({
+                id: favorite.id,
+                name: favorite.name,
+                city: favorite.city,
+                state: favorite.state,
+                yelp: {
+                    yelp_id: favorite.yelp_id,
+                    url: favorite.url,
+                    image_url: favorite.image_url
+                }
+            }))
+            : []
+    };
+    console.log("Formatted data in formatUserData:\n", formatted);
+    return formatted;
+};
+
 
 module.exports = {
     formatUserData

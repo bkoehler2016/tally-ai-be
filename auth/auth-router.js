@@ -6,11 +6,34 @@ const secret = require("../database/secrets");
 
 router.get('/', (req, res) => {
   Users.find()
-  .then(getUser => {
-    res.json(getUser);
-  })
-  .catch(err => res.send(err))
+    .then(getUser => {
+      res.json(getUser);
+    })
+    .catch(err => res.send(err))
 });
+
+// router.post("/register", (req, res) => {
+//   const user = req.body;
+
+//   const hash = bcrypt.hashSync(user.password, 12);
+//   user.password = hash;
+
+//   Users.add(user)
+//     .then(userN => {
+//       const token = getJwtToken(userN);
+
+//       Users.findByName(userN.first_name)
+//       .then(newUser => {
+//         console.log(newUser)
+//         res.status(200).json({ message: 'User registered.', id: newUser[0].id, token: token });
+//       })
+//       .catch(err => res.status(500).json('Unable to retrieve new user.'))
+//     })
+//     .catch(error => {
+//       console.log(error);
+//       res.status(500).json(error);
+//     });
+// });
 
 router.post("/register", (req, res) => {
   const user = req.body;
@@ -20,29 +43,24 @@ router.post("/register", (req, res) => {
 
   Users.add(user)
     .then(userN => {
-      const token = getJwtToken(userN);
-
-      Users.findByName(userN.first_name)
-      .then(newUser => {
-        console.log(newUser)
-        res.status(200).json({ message: 'User registered.', id: newUser[0].id, token: token });
-      })
-      .catch(err => res.status(500).json('Unable to retrieve new user.'))
+      const token = getJwtToken(userN.email, userN.password);
+      res.status(200).json({ userN, token })
     })
-    .catch(error => {
-      console.log(error);
-      res.status(500).json(error);
-    });
-});
+    .catch(err => res.status(500).json('Unable to retrieve new user.'))
+})
+// .catch(error => {
+//   console.log(error);
+//   res.status(500).json(error);
+// });
 
 router.post("/login", (req, res) => {
-  let { first_name, password } = req.body;
+  let { email, password } = req.body;
 
-  Users.findBy({ first_name })
+  Users.findBy({ email })
     .then(user => {
       user = user[0];
       if (user && bcrypt.compareSync(password, user.password)) {
-        const token = getJwtToken(user);
+        const token = getJwtToken(user.email, user.password);
         res.status(200).json({
           message: `Welcome ${user.first_name}!`,
           id: user.id,
@@ -65,8 +83,6 @@ function getJwtToken(email, password) {
     email,
     password
   };
-
-
 
   const options = {
     expiresIn: "7d"

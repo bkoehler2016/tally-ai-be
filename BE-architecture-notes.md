@@ -90,17 +90,8 @@ Res:
                 }
             },
             ...
-        ]
-    }
-```
-
-- POST /users/:id/business -DONE
-
-Req:
-
-```
-    {
-        "businesses": [
+        ],
+        "favorites": [
             {
                 "id": integer,
                 "name": string,
@@ -120,18 +111,66 @@ Req:
     }
 ```
 
+- POST /users/:id/business -DONE
+
+Req:
+
+```
+    {
+        "name": string,
+        "city": string,
+        "state": string,
+        "yelp": {
+            "id": string,
+            "yelp_id": string,
+            "url": string,
+            "image_url": string
+        }
+    }
+```
+
 NOTE: We will insert the business first, then get back the business id, put that into the yelp object, and then insert that object into the yelp table. (because business_id is a foreign key) Then we will create an entry in "users_businesses" connecting the two, using the :id and the business id.
 
 Res:
 
 ```
     {
-        "business_id": integer,
-        "yelp_id": integer
+        "event": {
+            // either another "message" or ids
+        },
+        "message"
     }
 ```
 
-NOTE: These are the IDs for the rows in the "businesses" and "yelp" tables, respectively.
+- POST /users/:id/favorite -DONE
+
+Req:
+
+```
+    {
+        "name": string,
+        "city": string,
+        "state": string,
+        "yelp": {
+            "id": string,
+            "yelp_id": string,
+            "url": string,
+            "image_url": string
+        }
+    }
+```
+
+Res:
+
+```
+    {
+        "event": {
+            // either another "message" or ids
+        },
+        "message"
+    }
+```
+
 
 - PUT /users/:id -DONE
 
