@@ -77,7 +77,7 @@ router.post('/:id/favorite', (req, res) => {
   const id = req.params.id
   Users.insertFavorite(req.body, id)
     .then(event => {
-      res.status(201).json({ ...event, message: "User Favorite posted" })
+      res.status(201).json({ event, message: "User Favorite posted" })
     })
     .catch(err => {
       console.log(err)

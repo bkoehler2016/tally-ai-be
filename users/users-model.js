@@ -80,29 +80,67 @@ async function findByBusinessID(id) {
 }
 
 async function insertBusiness(business, user_id) {
+  // // Separate yelp data from the rest of the business object
+  // const { yelp, ...rest } = business;
+
+  // // Check if business already in the DB
+  // const { yelp_id, business_id } = await db('yelp as y')
+  //   .select('y.id as yelp_id', 'y.business_id as business_id')
+  //   .where({ 'id': business.yelp.yelp_id }).first();
+
+  // if (yelp_id) {
+  //   return ({ business_id, yelp_id });
+  // } else {
+  //   // Insert into businesses table
+  //   const [id] = await db('businesses').insert({ ...rest });
+
+  //   // Insert into yelp table after adding business_id
+  //   const yelp_id = await db('yelp').insert({ ...yelp, business_id: id })
+
+  //   // Insert into users_businesses table
+  //   await db('users_businesses').insert({ business_id: id, user_id })
+
+  //   return ({ business_id: id, yelp_id });
+  // }
+
   // Separate yelp data from the rest of the business object
   const { yelp, ...rest } = business;
 
+  // console.log("Yelp: ", yelp);
+  console.log("Rest: ", rest);
+
   // Check if business already in the DB
-  const { yelp_id, business_id } = await db('yelp as y')
-    .select('y.id as yelp_id', 'y.business_id as business_id')
-    .where({ 'id': business.yelp.yelp_id }).first();
+  const test = 3;
+  try {
+    // const biz = await db('yelp as y')
+    //   .select('y.id as yelp_id', 'y.business_id as business_id')
+    //   .where({ 'y.business_id': test });
+    // console.log("Yelp ID in insertFavorite: ", biz.yelp_id);
+    const { exists, biz_id } = await businessExists(yelp.yelp_id);
+    console.log("Exists: ", exists);
+    console.log("biz_id: ", biz_id);
+    if (exists) {
+      try {
+        await db('users_businesses').insert({ business_id: biz_id, user_id }, "id")
+        return ({ business_id: biz_id, yelp_id: yelp.yelp_id });
+      } catch (error) {
+        return error;
+      }
+    } else {
+      // Insert into businesses table
+      const [id] = await db('businesses').insert(rest, "id");
 
-  if (yelp_id) {
-    return ({ business_id, yelp_id });
-  } else {
-    // Insert into businesses table
-    const [id] = await db('businesses').insert({ ...rest });
+      // Insert into yelp table after adding business_id
+      const yelp_id = await db('yelp').insert({ ...yelp, business_id: id }, "id")
 
-    // Insert into yelp table after adding business_id
-    const yelp_id = await db('yelp').insert({ ...yelp, business_id: id })
+      // Insert into users_businesses table
+      await db('users_businesses').insert({ business_id: id, user_id }, "id")
 
-    // Insert into users_businesses table
-    await db('users_businesses').insert({ business_id: id, user_id })
-
-    return ({ business_id: id, yelp_id });
+      return ({ business_id: id, yelp_id });
+    }
+  } catch (error) {
+    return error;
   }
-
 }
 
 function update(id, changes) {
@@ -147,25 +185,33 @@ async function insertFavorite(business, user_id) {
     console.log("Exists: ", exists);
     console.log("biz_id: ", biz_id);
     if (exists) {
-      try {
-        await db('users_favorites').insert({ business_id: biz_id, user_id }, "id")
-        return ({ business_id: biz_id, yelp_id: yelp.yelp_id });
-      } catch (error) {
-        return error;
+      const favorited = await alreadyFavorited(user_id, biz_id);
+      if (favorited) {
+        return { message: "Already favorited." }
+      } else {
+        try {
+          await db('users_favorites').insert({ business_id: biz_id, user_id }, "id")
+          return ({ business_id: biz_id, yelp_id: yelp.yelp_id });
+        } catch (error) {
+          return error;
+        }
       }
+
     } else {
       // Insert into businesses table
-      const [id] = await db('businesses').insert(rest, "id");
-
+      console.log("In else clause");
+      const [business_id] = await db('businesses').insert(rest);
+      console.log("business_id from insert", business_id);
       // Insert into yelp table after adding business_id
-      const yelp_id = await db('yelp').insert({ ...yelp, business_id: id }, "id")
-
+      const [yelp_id] = await db('yelp').insert({ business_id, ...yelp, });
+      console.log("yelp_id from insert: ", yelp_id)
       // Insert into users_businesses table
-      await db('users_favorites').insert({ business_id: id, user_id }, "id")
+      await db('users_favorites').insert({ business_id, user_id })
 
-      return ({ business_id: id, yelp_id });
+      return ({ business_id, yelp_id });
     }
   } catch (error) {
+    console.log("Error inserting favorite:\n", error);
     return error;
   }
 }
@@ -175,5 +221,15 @@ async function businessExists(yelp_id) {
     .select("y.business_id")
     .where({ 'y.yelp_id': yelp_id });
   console.log("Yelp in businessExists: ", yelp);
-  return { exists: yelp.length > 0, biz_id: yelp[0].business_id };
+  console.log("Yelp length > 0: ", yelp.length > 0);
+  // console.log("Yelp[0].business_id: ", yelp[0]);
+  return {
+    exists: yelp.length > 0,
+    biz_id: yelp.length > 0 ? yelp[0].business_id : undefined
+  };
+}
+
+async function alreadyFavorited(user_id, business_id) {
+  const favorited = await db("users_favorites").select("*").where({ user_id, business_id });
+  return favorited.length > 0;
 }
