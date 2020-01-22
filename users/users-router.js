@@ -64,11 +64,11 @@ router.post('/:id/business', (req, res) => {
   const id = req.params.id
   Users.insertBusiness(req.body, id)
     .then(event => {
-      res.status(201).json({ ...event, message: "User Business posted" })
+      res.status(201).json({ event, message: "User Business posted" })
     })
     .catch(err => {
       console.log(err)
-      res.status(500).json({ ...err, message: "User Business failed to post" })
+      res.status(500).json({ err, message: "User Business failed to post" })
     })
 })
 
@@ -81,7 +81,7 @@ router.post('/:id/favorite', (req, res) => {
     })
     .catch(err => {
       console.log(err)
-      res.status(500).json({ ...err, message: "User Favorite failed to post" })
+      res.status(500).json({ err, message: "User Favorite failed to post" })
     })
 })
 
