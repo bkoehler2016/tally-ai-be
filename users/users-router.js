@@ -74,8 +74,8 @@ router.post('/:id/business', (req, res) => {
 
 // Add favorite
 router.post('/:id/favorite', (req, res) => {
-  req.body.id = req.params.id
-  Users.insertFavorite(req.body)
+  const id = req.params.id
+  Users.insertFavorite(req.body, id)
     .then(event => {
       res.status(201).json({ ...event, message: "User Favorite posted" })
     })
