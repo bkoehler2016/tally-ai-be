@@ -1,4 +1,5 @@
 // Update with your config settings.
+require('dotenv').config();
 
 module.exports = {
   development: {
@@ -16,7 +17,7 @@ module.exports = {
   },
 
   staging: {
-    client: "postgresql",
+    client: "pg",
     useNullAsDefault: true,
     connection: {
       host: process.env.DB_STAGING_HOST,
@@ -41,7 +42,7 @@ module.exports = {
   },
 
   production: {
-    client: "postgresql",
+    client: "pg",
     useNullAsDefault: true,
     connection: {
       host: process.env.DB_PRODUCTION_HOST,
