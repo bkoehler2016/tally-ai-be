@@ -3,11 +3,17 @@ require('dotenv').config();
 
 module.exports = {
   development: {
-    client: "sqlite3",
+    client: "pg",
     useNullAsDefault: true,
-    connection: {
-      filename: "./database/testDB.db3"
-    },
+    connection: process.env.DATABASE_URL,//{
+    //   host: process.env.DB_TESTING_HOST,
+    //   user: process.env.DB_TESTING_USER,
+    //   password: process.env.DB_TESTING_PW,
+    //   database: process.env.DATABASE_TESTING,
+    //   options: {
+    //     port: process.env.DB_TESTING_PORT
+    //   }
+    // },
     migrations: {
       directory: "./database/migrations"
     },
@@ -17,7 +23,7 @@ module.exports = {
   },
 
   staging: {
-    client: "pg",
+    client: "postgresql",
     useNullAsDefault: true,
     connection: {
       host: process.env.DB_STAGING_HOST,
@@ -42,7 +48,7 @@ module.exports = {
   },
 
   production: {
-    client: "pg",
+    client: "postgresql",
     useNullAsDefault: true,
     connection: {
       host: process.env.DB_PRODUCTION_HOST,
