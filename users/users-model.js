@@ -166,12 +166,16 @@ function destroy(id) {
 
 // TODO: DELETE BUSINESS
 function destroyBusiness(id) {
-  return {}
+  return db("users_businesses")
+    .where("business_id", id)
+    .del();
 }
 
 // TODO: DELETE FAVORITE
 function destroyFavorite(id) {
-  return {}
+   return db("users_favorites")
+    .where("business_id", id)
+    .del();
 }
 
 
