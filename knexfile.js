@@ -36,7 +36,8 @@ module.exports = {
   production: {
     client: "pg",
     useNullAsDefault: true,
-    connection: process.env.DATABASE_URL + "?ssl=1",//{
+    connection: process.env.DATABASE_URL + '?ssl=1',
+    //{
     //   host: process.env.DB_TESTING_HOST,
     //   user: process.env.DB_TESTING_USER,
     //   password: process.env.DB_TESTING_PW,
