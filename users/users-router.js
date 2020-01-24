@@ -26,7 +26,7 @@ router.put("/:id", (req, res) => {
 // DELETE USER
 
 router.delete("/:id", (req, res) => {
-  db.destroy(req.params.id)
+  Users.destroy(req.params.id)
     .then(count => {
       if (count > 0) {
         res.status(200).json({ message: "User deleted" });
@@ -87,13 +87,30 @@ router.post('/:id/favorite', (req, res) => {
 
 // DELETE /users/:id/business
 
-router.delete('/:id/business', (req, res) => {
-  Users.destroy(req.params.id)
-    .then(event => {
+router.delete('/:id/business/:bID', (req, res) => {
+  Users.destroyBusiness(req.params.bID)
+    .then(async event => {
       if (!event) {
         res.status(404).json({ message: "No User Business exists by that ID!" })
       } else {
-        res.status(200).json({ message: "User Business Deleted" })
+        const businesses = await Users.getBusinesses(req.params.id);
+        res.status(200).json({ businesses, message: "User Business Deleted" })
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json(err)
+    })
+});
+
+router.delete('/:id/favorite/:bID', (req, res) => {
+  Users.destroyFavorite(req.params.bID)
+    .then(async event => {
+      if (!event) {
+        res.status(404).json({ message: "No User Business exists by that ID!" })
+      } else {
+        const favorites = await Users.getFavorites(req.params.id);
+        res.status(200).json({ favorites, message: "User Favorite Deleted" })
       }
     })
     .catch(err => {
