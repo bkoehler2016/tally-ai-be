@@ -48,7 +48,7 @@ async function getUsers(id) {
 }
 
 function getUserInfo(id) {
-  return db("users as u").where({ "u.id": id }).select("u.id as user_id", "u.first_name", "u.last_name").first();
+  return db("users as u").where({ "u.id": id }).select("*").first();
 }
 
 function getBusinesses(id) {
