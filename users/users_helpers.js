@@ -5,6 +5,7 @@ const formatUserData = data => {
         user_id: data.user_id,
         first_name: data.first_name,
         last_name: data.last_name,
+        preferences: data.preferences,
         /* Once we set up the model to account for multiple businesses,
             change the following to a map: */
         businesses: data.businesses.map(business => ({
