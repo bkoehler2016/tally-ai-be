@@ -3,11 +3,15 @@ const knex = require('knex');
 
 module.exports = {
   getUsers,
+  getBusinesses,
+  getFavorites,
   findByBusinessID,
   insertBusiness,
   insertFavorite,
   update,
-  destroy
+  destroy,
+  destroyBusiness,
+  destroyFavorite
 };
 
 async function getUsers(id) {
@@ -173,7 +177,7 @@ function destroyBusiness(id) {
 
 // TODO: DELETE FAVORITE
 function destroyFavorite(id) {
-   return db("users_favorites")
+  return db("users_favorites")
     .where("business_id", id)
     .del();
 }
