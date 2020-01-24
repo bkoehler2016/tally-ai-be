@@ -26,7 +26,7 @@ router.put("/:id", (req, res) => {
 // DELETE USER
 
 router.delete("/:id", (req, res) => {
-  db.destroy(req.params.id)
+  Users.destroy(req.params.id)
     .then(count => {
       if (count > 0) {
         res.status(200).json({ message: "User deleted" });
@@ -109,8 +109,8 @@ router.delete('/:id/favorite/:bID', (req, res) => {
       if (!event) {
         res.status(404).json({ message: "No User Business exists by that ID!" })
       } else {
-        const businesses = await Users.getFavorites(req.params.id);
-        res.status(200).json({ businesses, message: "User Favorite Deleted" })
+        const favorites = await Users.getFavorites(req.params.id);
+        res.status(200).json({ favorites, message: "User Favorite Deleted" })
       }
     })
     .catch(err => {
