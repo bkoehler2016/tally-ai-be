@@ -9,7 +9,7 @@ const helpers = require('./users_helpers');
 
 router.put("/:id", (req, res) => {
   const changes = req.body;
-  db.update(req.params.id, changes)
+  Users.update(req.params.id, changes)
     .then(user => {
       if (user) {
         res.status(200).json(user);
