@@ -78,12 +78,9 @@ Res:
             {
                 "id": integer,
                 "name": string,
-                "location": {
-                    "city": string,
-                    "state": string
-                }
+                "city": string,
+                "state": string,
                 "yelp": {
-                    "id": string,
                     "yelp_id": string,
                     "url": string,
                     "image_url": string
@@ -95,12 +92,9 @@ Res:
             {
                 "id": integer,
                 "name": string,
-                "location": {
-                    "city": string,
-                    "state": string
-                }
+                "city": string,
+                "state": string,
                 "yelp": {
-                    "id": string,
                     "yelp_id": string,
                     "url": string,
                     "image_url": string
@@ -190,25 +184,7 @@ Res:
 
 ```
     {
-        "first_name": string,
-        "last_name": string,
-        "businesses": [
-            {
-                "id": integer,
-                "name": string,
-                "location": {
-                    "city": string,
-                    "state": string
-                }
-                "yelp": {
-                    "id": string,
-                    "yelp_id": string,
-                    "url": string,
-                    "image_url": string
-                }
-            },
-            ...
-        ]
+        number of records changed (int)
     }
 ```
 
@@ -218,26 +194,9 @@ Res:
 
 ```
     {
-        "first_name": string,
-        "last_name": string,
-        "businesses": [
-            {
-                "id": integer,
-                "name": string,
-                "location": {
-                    "city": string,
-                    "state": string
-                }
-                "yelp": {
-                    "id": string,
-                    "yelp_id": string,
-                    "url": string,
-                    "image_url": string
-                }
-            },
-            ...
-        ]
+        "message": string
     }
+
 ```
 
 - DELETE /users/:id/business/:business_id
@@ -246,23 +205,17 @@ Res:
 
 ```
     {
-        "businesses": [
-            {
-                "id": integer,
-                "name": string,
-                "location": {
-                    "city": string,
-                    "state": string
-                }
-                "yelp": {
-                    "id": string,
-                    "yelp_id": string,
-                    "url": string,
-                    "image_url": string
-                }
-            },
-            ...
-        ]
+       "message": string
+    }
+```
+
+- DELETE /users/:id/favorite/:business_id
+
+Res:
+
+```
+    {
+       "message": string
     }
 ```
 
