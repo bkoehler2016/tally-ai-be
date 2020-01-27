@@ -121,7 +121,6 @@ Req:
         "city": string,
         "state": string,
         "yelp": {
-            "id": string,
             "yelp_id": string,
             "url": string,
             "image_url": string
@@ -152,7 +151,6 @@ Req:
         "city": string,
         "state": string,
         "yelp": {
-            "id": string,
             "yelp_id": string,
             "url": string,
             "image_url": string
