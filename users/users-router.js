@@ -9,6 +9,7 @@ const helpers = require('./users_helpers');
 
 router.put("/:id", (req, res) => {
   const changes = req.body;
+  console.log(`\nPUT changes:\n${changes}\n`);
   Users.update(req.params.id, changes)
     .then(user => {
       if (user) {

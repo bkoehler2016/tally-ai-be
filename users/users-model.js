@@ -156,6 +156,7 @@ async function insertBusiness(business, user_id) {
 }
 
 function update(id, changes) {
+  console.log(`\nChanges in update:\n${changes}\n`);
   return db("users")
     .where({ id })
     .update(changes);
