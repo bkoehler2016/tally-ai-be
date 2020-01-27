@@ -35,10 +35,14 @@ async function getUsers(id) {
   //   );
   try {
     const user = await getUserInfo(id);
+    console.log("User in users-model:\n", user);
+    const parsedUser = {
+      ...user, preferences: JSON.parse(user.preferences)
+    };
     const businesses = await getBusinesses(id);
     const favorites = await getFavorites(id);
     return ({
-      ...user,
+      ...parsedUser,
       businesses,
       favorites
     })
