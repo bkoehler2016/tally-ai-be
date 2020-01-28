@@ -2,7 +2,7 @@ const formatUserData = data => {
     console.log("Data in formatUserData:\n", data);
 
     const formatted = {
-        user_id: data.user_id,
+        user_id: data.id,
         first_name: data.first_name,
         last_name: data.last_name,
         preferences: data.preferences,

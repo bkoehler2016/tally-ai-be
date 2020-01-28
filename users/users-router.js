@@ -64,7 +64,14 @@ router.get('/:id', (req, res) => {
 router.post('/:id/business', (req, res) => {
   const id = req.params.id
   Users.insertBusiness(req.body, id)
-    .then(event => {
+    .then(async event => {
+      try {
+        const businesses = await Users.getBusinesses(id);
+        res.status(201).json({ event, businesses, message: "User Business posted" })
+      } catch (error) {
+        console.log(`Error fetching businesses after insert:\n${error}\n`);
+        res.status(404).json({ error, message: "Error fetching businesses after insert." });
+      }
       res.status(201).json({ event, message: "User Business posted" })
     })
     .catch(err => {
@@ -77,8 +84,14 @@ router.post('/:id/business', (req, res) => {
 router.post('/:id/favorite', (req, res) => {
   const id = req.params.id
   Users.insertFavorite(req.body, id)
-    .then(event => {
-      res.status(201).json({ event, message: "User Favorite posted" })
+    .then(async event => {
+      try {
+        const favorites = await Users.getFavorites(id);
+        res.status(201).json({ event, favorites, message: "User Favorite posted" })
+      } catch (error) {
+        console.log(`Error fetching favorites after insert:\n${error}\n`);
+        res.status(404).json({ error, message: "Error fetching favorites after insert." });
+      }
     })
     .catch(err => {
       console.log(err)
