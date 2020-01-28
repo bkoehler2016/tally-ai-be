@@ -1,5 +1,6 @@
 const db = require("../database/dbConfig");
 const knex = require('knex');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
   getUsers,
@@ -88,42 +89,11 @@ async function findByBusinessID(id) {
 }
 
 async function insertBusiness(business, user_id) {
-  // // Separate yelp data from the rest of the business object
-  // const { yelp, ...rest } = business;
-
-  // // Check if business already in the DB
-  // const { yelp_id, business_id } = await db('yelp as y')
-  //   .select('y.id as yelp_id', 'y.business_id as business_id')
-  //   .where({ 'id': business.yelp.yelp_id }).first();
-
-  // if (yelp_id) {
-  //   return ({ business_id, yelp_id });
-  // } else {
-  //   // Insert into businesses table
-  //   const [id] = await db('businesses').insert({ ...rest });
-
-  //   // Insert into yelp table after adding business_id
-  //   const yelp_id = await db('yelp').insert({ ...yelp, business_id: id })
-
-  //   // Insert into users_businesses table
-  //   await db('users_businesses').insert({ business_id: id, user_id })
-
-  //   return ({ business_id: id, yelp_id });
-  // }
-
-
   // Separate yelp data from the rest of the business object
   const { yelp, ...rest } = business;
 
-  // console.log("Yelp: ", yelp);
-  console.log("Rest: ", rest);
-
   // Check if business already in the DB
   try {
-    // const biz = await db('yelp as y')
-    //   .select('y.id as yelp_id', 'y.business_id as business_id')
-    //   .where({ 'y.business_id': test });
-    // console.log("Yelp ID in insertFavorite: ", biz.yelp_id);
     const { exists, biz_id } = await businessExists(yelp.yelp_id);
     console.log("Exists: ", exists);
     console.log("biz_id: ", biz_id);
@@ -162,6 +132,9 @@ async function insertBusiness(business, user_id) {
 function update(id, changes) {
   if (changes.preferences) {
     changes.preferences = JSON.stringify(changes.preferences);
+  }
+  if (changes.password) {
+    changes.password = bcrypt.hashSync(changes.password, 12);
   }
   console.log(`\nChanges in update:\n${changes}\n`);
   return db("users")
