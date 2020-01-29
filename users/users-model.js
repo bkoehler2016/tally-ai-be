@@ -16,24 +16,6 @@ module.exports = {
 };
 
 async function getUsers(id) {
-  // return db("users as u")
-  //   .join("users_businesses as ub", "ub.user_id", "u.id")
-  //   .join("businesses as b", "b.id", "ub.business_id")
-  //   .join("yelp as yb", "yb.business_id", "b.id")
-  //   .join("users_favorites as uf", "uf.user_id", "u.id")
-  //   .join("businesses as f", "f.id", "uf.business_id")
-  //   .join("yelp as yf", "yf.business_id", "f.id")
-  //   .where({ "u.id": id })
-  //   .select(
-  //     // User
-  //     "u.id as user_id", "u.first_name", "u.last_name", // users
-  //     // Businesses
-  //     "b.id as business_id_business", "b.name as name_business", "b.city as city_business", "b.state as state_business", // businesses
-  //     "yb.yelp_id as yelp_id_business", "yb.url as url_business", "yb.image_url as image_url_business", // yelp
-  //     // Favorites
-  //     "f.id as business_id_favorite", "f.name as name_favorite", "f.city as city_favorite", "f.state as state_favorite", // businesses
-  //     "yf.yelp_id as yelp_id_favorite", "yf.url as url_favorite", "yf.image_url as image_url_favorite" // yelp
-  //   );
   try {
     const user = await getUserInfo(id);
     console.log("User in users-model:\n", user);
@@ -95,7 +77,7 @@ async function insertBusiness(business, user_id) {
   // Check if business already in the DB
   try {
     const { exists, biz_id } = await businessExists(yelp.yelp_id);
-    console.log("Exists: ", exists);
+    console.log("Business xists? ", exists);
     console.log("biz_id: ", biz_id);
     if (exists) {
       const added = await alreadyAddedBusiness(user_id, biz_id);
@@ -112,7 +94,7 @@ async function insertBusiness(business, user_id) {
 
     } else {
       // Insert into businesses table
-      console.log("In else clause");
+      console.log("Adding a new business...");
       const [business_id] = await db('businesses').insert(rest);
       console.log("business_id from insert", business_id);
       // Insert into yelp table after adding business_id
@@ -143,20 +125,17 @@ function update(id, changes) {
 }
 
 function destroy(id) {
-  // TODO: Also delete entry from users_businesses where user_id: id
   return db("users")
     .where("id", id)
     .del();
 }
 
-// TODO: DELETE BUSINESS
 function destroyBusiness(id) {
   return db("users_businesses")
     .where("business_id", id)
     .del();
 }
 
-// TODO: DELETE FAVORITE
 function destroyFavorite(id) {
   return db("users_favorites")
     .where("business_id", id)
@@ -173,10 +152,6 @@ async function insertFavorite(business, user_id) {
 
   // Check if business already in the DB
   try {
-    // const biz = await db('yelp as y')
-    //   .select('y.id as yelp_id', 'y.business_id as business_id')
-    //   .where({ 'y.business_id': test });
-    // console.log("Yelp ID in insertFavorite: ", biz.yelp_id);
     const { exists, biz_id } = await businessExists(yelp.yelp_id);
     console.log("Exists: ", exists);
     console.log("biz_id: ", biz_id);
