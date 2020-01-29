@@ -77,7 +77,7 @@ async function insertBusiness(business, user_id) {
   // Check if business already in the DB
   try {
     const { exists, biz_id } = await businessExists(yelp.yelp_id);
-    console.log("Business xists? ", exists);
+    console.log("Business exists? ", exists);
     console.log("biz_id: ", biz_id);
     if (exists) {
       const added = await alreadyAddedBusiness(user_id, biz_id);
