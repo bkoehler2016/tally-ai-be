@@ -22,13 +22,14 @@ async function getUsers(id) {
       throw new Error("User not found.");
     }
     console.log("User in users-model:\n", user);
-    const parsedUser = {
-      ...user, preferences: user.preferences ? JSON.parse(user.preferences) : {}
-    };
+    // const parsedUser = {
+    //   ...user, preferences: user.preferences ? JSON.parse(user.preferences) : {}
+    // };
+    // console.log("parsed user in users-model: ", parsedUser);
     const businesses = await getBusinesses(id);
     const favorites = await getFavorites(id);
     return ({
-      ...parsedUser,
+      ...user,
       businesses,
       favorites
     })
