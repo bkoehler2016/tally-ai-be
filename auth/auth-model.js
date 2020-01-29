@@ -1,22 +1,22 @@
 const db = require('../database/dbConfig');
 
 function find() {
-  return db("users").select("id", "first_name", "last_name", "email", "password", "preferences");
+  return db("tallyweb.users").select("id", "first_name", "last_name", "email", "password", "preferences");
 }
 
 function findBy(filter) {
-  return db('users').where(filter);
+  return db('tallyweb.users').where(filter);
 }
 
 
 
 async function add(user) {
-  const [id] = await db('users').insert(user, 'id');
+  const [id] = await db('tallyweb.users').insert(user, 'id');
   return findById(id);
 }
 
 function findByName(first_name) {
-  return db('users')
+  return db('tallyweb.users')
     .where({
       first_name: first_name
     })
@@ -24,13 +24,13 @@ function findByName(first_name) {
 }
 
 function findById(id) {
-  return db('users')
+  return db('tallyweb.users')
     .where({ id })
     .first();
 }
 
 function remove(id) {
-  return db('users')
+  return db('tallyweb.users')
     .where({ id })
     .first()
     .del();

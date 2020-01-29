@@ -37,6 +37,18 @@ const formatUserData = data => {
     return formatted;
 };
 
+const formatBusinesses = data => data.businesses.map(business => ({
+    id: business.id,
+    name: business.name,
+    city: business.city,
+    state: business.state,
+    yelp: {
+        yelp_id: business.yelp_id,
+        url: business.url,
+        image_url: business.image_url
+    }
+}))
+
 
 module.exports = {
     formatUserData
