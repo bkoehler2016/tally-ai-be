@@ -36,14 +36,15 @@ module.exports = {
   production: {
     client: "pg",
     useNullAsDefault: true,
-    connection: process.env.DATABASE_URL + '?ssl=1',
-    //{
-    //   host: process.env.DB_TESTING_HOST,
-    //   user: process.env.DB_TESTING_USER,
-    //   password: process.env.DB_TESTING_PW,
-    //   database: process.env.DATABASE_TESTING,
+    connection: `postgres://${process.env.DB_PRODUCTION_USER}:${process.env.DB_PRODUCTION_PW}@${process.env.DB_PRODUCTION_HOST}:${process.env.DB_PRODUCTION_PORT}/${process.env.DATABASE_PRODUCTION}`,
+    //process.env.DATABASE_URL + '?ssl=1',
+    // {
+    //   host: process.env.DB_PRODUCTION_HOST,
+    //   user: process.env.DB_PRODUCTION_USER,
+    //   password: process.env.DB_PRODUCTION_PW,
+    //   database: process.env.DATABASE_PRODUCTION,
     //   options: {
-    //     port: process.env.DB_TESTING_PORT
+    //     port: process.env.DB_PRODUCTION_PORT
     //   }
     // },
     pool: {

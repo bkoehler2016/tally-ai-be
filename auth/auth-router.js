@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const Users = require("./auth-model");
 const secret = require("../database/secrets");
 
+const { validateUser } = require('./auth-helpers');
+
 router.get('/', (req, res) => {
   Users.find()
     .then(getUser => {
@@ -35,23 +37,26 @@ router.get('/', (req, res) => {
 //     });
 // });
 
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
   const user = req.body;
 
-  const hash = bcrypt.hashSync(user.password, 12);
-  user.password = hash;
+  const { isSuccessful, errors } = await validateUser(user);
 
-  Users.add(user)
-    .then(userN => {
-      const token = getJwtToken(userN.email, userN.password);
-      res.status(200).json({ userN, token })
-    })
-    .catch(err => res.status(500).json('Unable to retrieve new user.'))
+  if (isSuccessful) {
+    const hash = bcrypt.hashSync(user.password, 12);
+    user.password = hash;
+
+    Users.add(user)
+      .then(userN => {
+        const token = getJwtToken(userN.email, userN.password);
+        res.status(200).json({ userN, token })
+      })
+      .catch(error => res.status(500).json({ message: 'Unable to retrieve new user.', error }))
+  } else {
+    res.status(400).json({ errors });
+  }
+
 })
-// .catch(error => {
-//   console.log(error);
-//   res.status(500).json(error);
-// });
 
 router.post("/login", (req, res) => {
   let { email, password } = req.body;
