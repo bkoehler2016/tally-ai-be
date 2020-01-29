@@ -98,13 +98,13 @@ async function insertBusiness(business, user_id) {
     } else {
       // Insert into businesses table
       console.log("Adding a new business...");
-      const [business_id] = await db('tallyweb.businesses').insert(rest);
+      const [business_id] = await db('tallyweb.businesses').insert(rest, "id");
       console.log("business_id from insert", business_id);
       // Insert into yelp table after adding business_id
-      const [yelp_id] = await db('tallyweb.yelp').insert({ business_id, ...yelp, });
+      const [yelp_id] = await db('tallyweb.yelp').insert({ business_id, ...yelp, }, "id");
       console.log("yelp_id from insert: ", yelp_id)
       // Insert into users_businesses table
-      await db('tallyweb.users_business').insert({ business_id, user_id })
+      await db('tallyweb.users_businesses').insert({ business_id, user_id }, "id")
 
       return ({ business_id, yelp_id });
     }
@@ -174,13 +174,13 @@ async function insertFavorite(business, user_id) {
     } else {
       // Insert into businesses table
       console.log("In else clause");
-      const [business_id] = await db('tallyweb.businesses').insert(rest);
+      const [business_id] = await db('tallyweb.businesses').insert(rest, "id");
       console.log("business_id from insert", business_id);
       // Insert into yelp table after adding business_id
-      const [yelp_id] = await db('tallyweb.yelp').insert({ business_id, ...yelp, });
+      const [yelp_id] = await db('tallyweb.yelp').insert({ business_id, ...yelp, }, "id");
       console.log("yelp_id from insert: ", yelp_id)
       // Insert into users_businesses table
-      await db('tallyweb.users_favorites').insert({ business_id, user_id })
+      await db('tallyweb.users_favorites').insert({ business_id, user_id }, "id")
 
       return ({ business_id, yelp_id });
     }
