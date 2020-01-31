@@ -8,6 +8,7 @@ const usersRouter = require("../users/users-router");
 
 // CUSTOM MIDDLEWARE
 const authMiddleware = require("../auth/authenticate-middleware");
+const validateIdMiddleware = require("../users/validate-id-middleware");
 
 const server = express();
 
