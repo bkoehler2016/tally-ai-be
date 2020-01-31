@@ -5,9 +5,11 @@ const Users = require("./users-model");
 const router = express.Router();
 const helpers = require('./users_helpers');
 
+const middleware = require("./validate-id-middleware");
+
 // CHANGE USER CREDENTIALS
 
-router.put("/:id", (req, res) => {
+router.put("/:id", middleware, (req, res) => {
   const changes = req.body;
   console.log(`\nPUT changes:\n${changes}\n`);
   Users.update(req.params.id, changes)
@@ -26,7 +28,7 @@ router.put("/:id", (req, res) => {
 
 // DELETE USER
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", middleware, (req, res) => {
   Users.destroy(req.params.id)
     .then(count => {
       if (count > 0) {
@@ -43,7 +45,7 @@ router.delete("/:id", (req, res) => {
 
 // GET /users/:id
 
-router.get('/:id', (req, res) => {
+router.get('/:id', middleware, (req, res) => {
   const { id } = req.params
   Users.getUsers(id)
     .then(data => {
@@ -61,7 +63,7 @@ router.get('/:id', (req, res) => {
 
 // POST /users/:id/business
 
-router.post('/:id/business', (req, res) => {
+router.post('/:id/business', middleware, (req, res) => {
   const id = req.params.id
   Users.insertBusiness(req.body, id)
     .then(async event => {
@@ -81,7 +83,7 @@ router.post('/:id/business', (req, res) => {
 })
 
 // Add favorite
-router.post('/:id/favorite', (req, res) => {
+router.post('/:id/favorite', middleware, (req, res) => {
   const id = req.params.id
   Users.insertFavorite(req.body, id)
     .then(async event => {
@@ -101,7 +103,7 @@ router.post('/:id/favorite', (req, res) => {
 
 // DELETE /users/:id/business
 
-router.delete('/:id/business/:bID', (req, res) => {
+router.delete('/:id/business/:bID', middleware, (req, res) => {
   Users.destroyBusiness(req.params.bID)
     .then(async event => {
       if (!event) {
@@ -117,7 +119,7 @@ router.delete('/:id/business/:bID', (req, res) => {
     })
 });
 
-router.delete('/:id/favorite/:bID', (req, res) => {
+router.delete('/:id/favorite/:bID', middleware, (req, res) => {
   Users.destroyFavorite(req.params.bID)
     .then(async event => {
       if (!event) {

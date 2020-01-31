@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 
 module.exports = {
   getUsers,
+  getUserId,
   getBusinesses,
   getFavorites,
   findByBusinessID,
@@ -14,6 +15,10 @@ module.exports = {
   destroyBusiness,
   destroyFavorite
 };
+
+function getUserId(filter) {
+  return db("tallyweb.users as u").where(filter).select("u.id").first();
+}
 
 async function getUsers(id) {
   try {
