@@ -5,6 +5,8 @@ const Users = require("./users-model");
 const router = express.Router();
 const helpers = require('./users_helpers');
 
+const middleware = require("./validate-id-middleware");
+
 // CHANGE USER CREDENTIALS
 
 router.put("/:id", (req, res) => {
@@ -43,7 +45,7 @@ router.delete("/:id", (req, res) => {
 
 // GET /users/:id
 
-router.get('/:id', (req, res) => {
+router.get('/:id', middleware, (req, res) => {
   const { id } = req.params
   Users.getUsers(id)
     .then(data => {
