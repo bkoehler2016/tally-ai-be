@@ -49,15 +49,9 @@ router.get('/:id', middleware, (req, res) => {
   const { id } = req.params
   Users.getUsers(id)
     .then(data => {
-      // if (data) {
-      // console.log("Data in users-router:\n", helpers.formatUserData(data));
       const formatted = helpers.formatUserData(data);
       console.log("Formatted Data in users-router:\n", formatted);
       res.status(200).json(formatted);
-      // }
-      // else {
-      //   res.status(404).json({ message: `error retrieving the worker.` })
-      // }
     }).catch(error => res.status(404).json({ message: "Error fetching user data", error }));
 });
 
