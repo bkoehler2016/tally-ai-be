@@ -63,7 +63,9 @@ router.post('/:id/business', middleware, (req, res) => {
     .then(async event => {
       try {
         const businesses = await Users.getBusinesses(id);
-        res.status(201).json({ event, businesses, message: "User Business posted" })
+        console.log("Businesses in POST business:\n", business)
+        const formattedBusinesses = helpers.formatBusinesses(businesses);
+        res.status(201).json({ event, formattedBusinesses, message: "User Business posted" })
       } catch (error) {
         console.log(`Error fetching businesses after insert:\n${error}\n`);
         res.status(404).json({ error, message: "Error fetching businesses after insert." });
@@ -83,7 +85,8 @@ router.post('/:id/favorite', middleware, (req, res) => {
     .then(async event => {
       try {
         const favorites = await Users.getFavorites(id);
-        res.status(201).json({ event, favorites, message: "User Favorite posted" })
+        const formattedFavorites = helpers.formatBusinesses(favorites);
+        res.status(201).json({ event, formattedFavorites, message: "User Favorite posted" })
       } catch (error) {
         console.log(`Error fetching favorites after insert:\n${error}\n`);
         res.status(404).json({ error, message: "Error fetching favorites after insert." });
@@ -104,7 +107,8 @@ router.delete('/:id/business/:bID', middleware, (req, res) => {
         res.status(404).json({ message: "No User Business exists by that ID!" })
       } else {
         const businesses = await Users.getBusinesses(req.params.id);
-        res.status(200).json({ businesses, message: "User Business Deleted" })
+        const formattedBusinesses = helpers.formatBusinesses(businesses);
+        res.status(200).json({ formattedBusinesses, message: "User Business Deleted" })
       }
     })
     .catch(err => {
@@ -120,7 +124,8 @@ router.delete('/:id/favorite/:bID', middleware, (req, res) => {
         res.status(404).json({ message: "No User Business exists by that ID!" })
       } else {
         const favorites = await Users.getFavorites(req.params.id);
-        res.status(200).json({ favorites, message: "User Favorite Deleted" })
+        const formattedFavorites = helpers.formatBusinesses(favorites);
+        res.status(200).json({ formattedFavorites, message: "User Favorite Deleted" })
       }
     })
     .catch(err => {

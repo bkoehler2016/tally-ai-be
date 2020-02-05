@@ -52,5 +52,6 @@ const formatBusinesses = data => data.businesses.map(business => ({
 
 
 module.exports = {
-    formatUserData
+    formatUserData,
+    formatBusinesses
 }
