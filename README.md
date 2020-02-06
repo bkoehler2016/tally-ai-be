@@ -184,17 +184,9 @@ In order for the app to function correctly, the user must set up their own envir
 create a .env file that includes the following:
 
 ```
-DB_PRODUCTION_HOST=database-spotifier.c5eevkz7wazj.us-east-2.rds.amazonaws.com
-DB_PRODUCTION_USER=tally_web
-DB_PRODUCTION_PW=P@ssw0rd
-DATABASE_PRODUCTION=postgres
-DB_PRODUCTION_PORT=5432
-
 ENVIRONMENT=production
 
 PORT=5000
-
-DATABASE_URL=postgres://vbckeiueunqyzg:388965fda2701d1ddc163ab37f54fa9e7090db09b6c0c00387ee2ae130d147fa@ec2-107-20-185-16.compute-1.amazonaws.com:5432/da1not5f0t59o4
 
 NPM_CONFIG_UNSAFE_PERM=true
 ```
