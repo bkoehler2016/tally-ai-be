@@ -81,66 +81,101 @@ TODO: Create a testing database and set up testing environment. Configure existi
 
 🚫This is just an example. Replace this with your data model
 
-#### 2️⃣ ORGANIZATIONS
-
----
-
-```
-{
-  id: UUID
-  name: STRING
-  industry: STRING
-  paid: BOOLEAN
-  customer_id: STRING
-  subscription_id: STRING
-}
-```
-
 #### USERS
 
 ---
 
 ```
 {
-  id: UUID
-  organization_id: UUID foreign key in ORGANIZATIONS table
-  first_name: STRING
-  last_name: STRING
-  role: STRING [ 'owner', 'supervisor', 'employee' ]
-  email: STRING
-  phone: STRING
-  cal_visit: BOOLEAN
-  emp_visit: BOOLEAN
-  emailpref: BOOLEAN
-  phonepref: BOOLEAN
+  id: INTEGER
+  first_name: TEXT
+  last_name: TEXT
+  email: TEXT
+  password: TEXT
+  preferences: JSON
 }
 ```
 
+#### BUSINESSES
+
+---
+
+```
+{
+  id: INTEGER
+  name: TEXT
+  city: TEXT
+  state: TEXT
+}
+```
+
+#### FAVORITES
+
+---
+
+```
+{
+  id: INTEGER
+  name: TEXT
+  city: TEXT
+  state: TEXT
+}
+```
+
+#### USERS_BUSINESSES
+
+---
+
+```
+{
+  id: INTEGER
+  user_id: INTEGER
+  business_id: INTEGER
+}
+```
+
+#### USERS_FAVORITES
+
+---
+
+```
+{
+  id: INTEGER
+  user_id: INTEGER
+  business_id: INTEGER
+}
+```
+
+#### YELP
+
+---
+
+```
+{
+  id: INTEGER
+  business_id: INTEGER
+  yelp_id: TEXT
+  url: TEXT
+  image_url: TEXT
+}
+```
+
+
+
+
 ## 2️⃣ Actions
 
-🚫 This is an example, replace this with the actions that pertain to your backend
+### Helper Functions
 
-`getOrgs()` -> Returns all organizations
+#### Auth Helpers
+- validateUser(user) -> Validates email, password, first and last name. Returns isSuccessful and errors.
+- getJwtToken(email, password) -> Returns JWT.
 
-`getOrg(orgId)` -> Returns a single organization by ID
+#### Users Helpers
+- formatUserData(user) -> Takes user info from getUserInfo(id) model function and formats data for response.
+- formatBusinesses(businesses) -> Takes an array of businesses from getBusinesses(userId) or getFavorites(userId) and formats data for response.
 
-`addOrg(org)` -> Returns the created org
-
-`updateOrg(orgId)` -> Update an organization by ID
-
-`deleteOrg(orgId)` -> Delete an organization by ID
-<br>
-<br>
-<br>
-`getUsers(orgId)` -> if no param all users
-
-`getUser(userId)` -> Returns a single user by user ID
-
-`addUser(user object)` --> Creates a new user and returns that user. Also creates 7 availabilities defaulted to hours of operation for their organization.
-
-`updateUser(userId, changes object)` -> Updates a single user by ID.
-
-`deleteUser(userId)` -> deletes everything dependent on the user
+TODO: Use formatBusinesses() in POST/DELETE endpoints for business/favorite.
 
 ## 3️⃣ Environment Variables
 
@@ -148,13 +183,21 @@ In order for the app to function correctly, the user must set up their own envir
 
 create a .env file that includes the following:
 
-🚫 These are just examples, replace them with the specifics for your app
-    
-    *  STAGING_DB - optional development db for using functionality not available in SQLite
-    *  NODE_ENV - set to "development" until ready for "production"
-    *  JWT_SECRET - you can generate this by using a python shell and running import random''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&amp;*(-*=+)') for i in range(50)])
-    *  SENDGRID_API_KEY - this is generated in your Sendgrid account
-    *  stripe_secret - this is generated in the Stripe dashboard
+```
+DB_PRODUCTION_HOST=database-spotifier.c5eevkz7wazj.us-east-2.rds.amazonaws.com
+DB_PRODUCTION_USER=tally_web
+DB_PRODUCTION_PW=P@ssw0rd
+DATABASE_PRODUCTION=postgres
+DB_PRODUCTION_PORT=5432
+
+ENVIRONMENT=production
+
+PORT=5000
+
+DATABASE_URL=postgres://vbckeiueunqyzg:388965fda2701d1ddc163ab37f54fa9e7090db09b6c0c00387ee2ae130d147fa@ec2-107-20-185-16.compute-1.amazonaws.com:5432/da1not5f0t59o4
+
+NPM_CONFIG_UNSAFE_PERM=true
+```
     
 ## Contributing
 
