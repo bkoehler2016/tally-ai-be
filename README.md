@@ -189,6 +189,12 @@ ENVIRONMENT=production
 PORT=5000
 
 NPM_CONFIG_UNSAFE_PERM=true
+
+DB_PRODUCTION_HOST=********
+DB_PRODUCTION_USER=********
+DB_PRODUCTION_PW=********
+DATABASE_PRODUCTION=********
+DB_PRODUCTION_PORT=********
 ```
     
 ## Contributing
