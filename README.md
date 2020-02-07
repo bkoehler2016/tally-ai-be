@@ -56,7 +56,7 @@ TODO: Create a testing database and set up testing environment. Configure existi
 - JWT
 - bcrypt.js
 
-## 2️⃣ Endpoints
+## Endpoints
 
 #### Authentication Routes
 
@@ -78,8 +78,6 @@ TODO: Create a testing database and set up testing environment. Configure existi
 | DELETE | `/users/:id/favorite`   | logged-in user with id | Deletes an existing competitor from a user's account.                         |
 
 # Data Model
-
-🚫This is just an example. Replace this with your data model
 
 #### USERS
 
@@ -163,7 +161,7 @@ TODO: Create a testing database and set up testing environment. Configure existi
 
 
 
-## 2️⃣ Actions
+## Actions
 
 ### Helper Functions
 
@@ -177,7 +175,7 @@ TODO: Create a testing database and set up testing environment. Configure existi
 
 TODO: Use formatBusinesses() in POST/DELETE endpoints for business/favorite.
 
-## 3️⃣ Environment Variables
+## Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
 
@@ -235,5 +233,4 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-See [Frontend Documentation](🚫link to your frontend readme here) for details on the fronend of our project.
-🚫 Add DS iOS and/or Andriod links here if applicable.
+See [Frontend Documentation](https://github.com/Lambda-School-Labs/tally-ai-fe) for details on the fronend of our project.
