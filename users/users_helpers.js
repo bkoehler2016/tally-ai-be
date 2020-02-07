@@ -38,7 +38,7 @@ const formatUserData = data => {
 };
 
 // TODO: Use formatBusinesses on response for adding/deleting businesses/favorites
-const formatBusinesses = data => data.businesses.map(business => ({
+const formatBusinesses = businesses => businesses.map(business => ({
     id: business.id,
     name: business.name,
     city: business.city,
