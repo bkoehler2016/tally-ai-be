@@ -60,7 +60,7 @@ router.post('/:id/business', middleware, (req, res) => {
     .then(async event => {
       try {
         const businesses = await Users.getBusinesses(id);
-        console.log("Businesses in POST business:\n", business);
+        console.log("Businesses in POST business:\n", businesses);
         const formattedBusinesses = helpers.formatBusinesses(businesses);
         // TODO: Replace businesses: businesses with businesses: formattedBusinesses
         res.status(201).json({ event, businesses: businesses, message: "User Business posted" });
