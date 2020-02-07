@@ -6,19 +6,19 @@ const formatUserData = data => {
         first_name: data.first_name,
         last_name: data.last_name,
         preferences: data.preferences,
-        /* Once we set up the model to account for multiple businesses,
-            change the following to a map: */
-        businesses: data.businesses.map(business => ({
-            id: business.id,
-            name: business.name,
-            city: business.city,
-            state: business.state,
-            yelp: {
-                yelp_id: business.yelp_id,
-                url: business.url,
-                image_url: business.image_url
-            }
-        })),
+        businesses: data.businesses.length
+            ? data.businesses.map(business => ({
+                id: business.id,
+                name: business.name,
+                city: business.city,
+                state: business.state,
+                yelp: {
+                    yelp_id: business.yelp_id,
+                    url: business.url,
+                    image_url: business.image_url
+                }
+            }))
+            : [],
         favorites: data.favorites.length
             ? data.favorites.map(favorite => ({
                 id: favorite.id,
@@ -37,7 +37,8 @@ const formatUserData = data => {
     return formatted;
 };
 
-const formatBusinesses = data => data.businesses.map(business => ({
+// TODO: Use formatBusinesses on response for adding/deleting businesses/favorites
+const formatBusinesses = businesses => businesses.map(business => ({
     id: business.id,
     name: business.name,
     city: business.city,
@@ -51,5 +52,6 @@ const formatBusinesses = data => data.businesses.map(business => ({
 
 
 module.exports = {
-    formatUserData
+    formatUserData,
+    formatBusinesses
 }

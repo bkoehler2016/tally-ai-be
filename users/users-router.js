@@ -8,7 +8,6 @@ const helpers = require('./users_helpers');
 const middleware = require("./validate-id-middleware");
 
 // CHANGE USER CREDENTIALS
-
 router.put("/:id", middleware, (req, res) => {
   const changes = req.body;
   console.log(`\nPUT changes:\n${changes}\n`);
@@ -27,7 +26,6 @@ router.put("/:id", middleware, (req, res) => {
 });
 
 // DELETE USER
-
 router.delete("/:id", middleware, (req, res) => {
   Users.destroy(req.params.id)
     .then(count => {
@@ -43,96 +41,101 @@ router.delete("/:id", middleware, (req, res) => {
     });
 });
 
-// GET /users/:id
-
+// GET USER INFO
 router.get('/:id', middleware, (req, res) => {
-  const { id } = req.params
+  const { id } = req.params;
   Users.getUsers(id)
     .then(data => {
-      // if (data) {
-      // console.log("Data in users-router:\n", helpers.formatUserData(data));
       const formatted = helpers.formatUserData(data);
       console.log("Formatted Data in users-router:\n", formatted);
       res.status(200).json(formatted);
-      // }
-      // else {
-      //   res.status(404).json({ message: `error retrieving the worker.` })
-      // }
     }).catch(error => res.status(404).json({ message: "Error fetching user data", error }));
 });
 
-// POST /users/:id/business
-
+// ADD BUSINESS
+// TODO: Return formattedBusinesses; need to adjust front end to account for the different format.
 router.post('/:id/business', middleware, (req, res) => {
-  const id = req.params.id
+  const id = req.params.id;
   Users.insertBusiness(req.body, id)
     .then(async event => {
       try {
         const businesses = await Users.getBusinesses(id);
-        res.status(201).json({ event, businesses, message: "User Business posted" })
+        console.log("Businesses in POST business:\n", businesses);
+        const formattedBusinesses = helpers.formatBusinesses(businesses);
+        // TODO: Replace businesses: businesses with businesses: formattedBusinesses
+        res.status(201).json({ event, businesses: businesses, message: "User Business posted" });
       } catch (error) {
         console.log(`Error fetching businesses after insert:\n${error}\n`);
         res.status(404).json({ error, message: "Error fetching businesses after insert." });
       }
-      res.status(201).json({ event, message: "User Business posted" })
+      res.status(201).json({ event, message: "User Business posted" });
     })
     .catch(err => {
-      console.log(err)
-      res.status(500).json({ err, message: "User Business failed to post" })
-    })
+      console.log(err);
+      res.status(500).json({ err, message: "User Business failed to post" });
+    });
 })
 
-// Add favorite
+// ADD FAVORITE
+// TODO: Return formattedFavorites; need to adjust front end to account for the different format.
 router.post('/:id/favorite', middleware, (req, res) => {
-  const id = req.params.id
+  const id = req.params.id;
   Users.insertFavorite(req.body, id)
     .then(async event => {
       try {
         const favorites = await Users.getFavorites(id);
-        res.status(201).json({ event, favorites, message: "User Favorite posted" })
+        const formattedFavorites = helpers.formatBusinesses(favorites);
+        // TODO: Replace favorites: favorites with favorites: formattedFavorites
+        res.status(201).json({ event, favorites: favorites, message: "User Favorite posted" });
       } catch (error) {
-        console.log(`Error fetching favorites after insert:\n${error}\n`);
+        console.log(`Error fetching favorites after ins ert:\n${error}\n`);
         res.status(404).json({ error, message: "Error fetching favorites after insert." });
       }
     })
     .catch(err => {
-      console.log(err)
-      res.status(500).json({ err, message: "User Favorite failed to post" })
-    })
+      console.log(err);
+      res.status(500).json({ err, message: "User Favorite failed to post" });
+    });
 })
 
-// DELETE /users/:id/business
-
+// DELETE BUSINESS
+// TODO: Return formattedBusinesses; need to adjust front end to account for the different format.
 router.delete('/:id/business/:bID', middleware, (req, res) => {
   Users.destroyBusiness(req.params.bID)
     .then(async event => {
       if (!event) {
-        res.status(404).json({ message: "No User Business exists by that ID!" })
+        res.status(404).json({ message: "No User Business exists by that ID!" });
       } else {
         const businesses = await Users.getBusinesses(req.params.id);
-        res.status(200).json({ businesses, message: "User Business Deleted" })
+        const formattedBusinesses = helpers.formatBusinesses(businesses);
+        // TODO: Replace businesses: businesses with businesses: formattedBusinesses
+        res.status(200).json({ businesses: businesses, message: "User Business Deleted" });
       }
     })
     .catch(err => {
       console.log(err)
-      res.status(500).json(err)
-    })
+      res.status(500).json(err);
+    });
 });
 
+// DELETE FAVORITE
+// TODO: Return formattedFavorites; need to adjust front end to account for the different format.
 router.delete('/:id/favorite/:bID', middleware, (req, res) => {
   Users.destroyFavorite(req.params.bID)
     .then(async event => {
       if (!event) {
-        res.status(404).json({ message: "No User Business exists by that ID!" })
+        res.status(404).json({ message: "No User Business exists by that ID!" });
       } else {
         const favorites = await Users.getFavorites(req.params.id);
-        res.status(200).json({ favorites, message: "User Favorite Deleted" })
+        const formattedFavorites = helpers.formatBusinesses(favorites);
+        // TODO: Replace favorites: favorites with favorites: formattedFavorites
+        res.status(200).json({ favorites: favorites, message: "User Favorite Deleted" });
       }
     })
     .catch(err => {
-      console.log(err)
-      res.status(500).json(err)
-    })
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;
