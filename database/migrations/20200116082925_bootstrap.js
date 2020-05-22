@@ -50,7 +50,19 @@ exports.up = function(knex) {
         .notNullable()
         .unique();
       Yelp.string("image_url");
-    });
+    })
+    .createTable("google_users", gUsers => {
+      gUsers.integer('gUser_id')
+        .primary()
+        .notNullable();
+      gUsers.string("first_name").notNullable();
+      gUsers.string("last_name").notNullable();
+      gUsers.string("email")
+        .unique()
+        .notNullable();
+      gUsers.timestamp("created at").defaultTo(knex.fn.now());
+      gUsers.json("preferences")
+    })
 };
 
 exports.down = function(knex) {
@@ -58,5 +70,6 @@ exports.down = function(knex) {
     .dropTableIfExists("yelp")
     .dropTableIfExists("users_businesses")
     .dropTableIfExists("businesses")
-    .dropTableIfExists("users");
+    .dropTableIfExists("users")
+    .dropTableIfExists("google_users");
 };
