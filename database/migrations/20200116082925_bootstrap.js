@@ -11,6 +11,18 @@ exports.up = function(knex) {
       Users.timestamp("created at").defaultTo(knex.fn.now());
       Users.json("preferences");
     })
+    .createTable("google_users", gUsers => {
+      gUsers.integer('gUser_id')
+        .primary()
+        .notNullable();
+      gUsers.string("first_name").notNullable();
+      gUsers.string("last_name").notNullable();
+      gUsers.string("email")
+        .unique()
+        .notNullable();
+      gUsers.timestamp("created at").defaultTo(knex.fn.now());
+      gUsers.json("preferences")
+    })
     .createTable("businesses", Businesses => {
       Businesses.increments();
       Businesses.string("name").notNullable();
@@ -50,18 +62,6 @@ exports.up = function(knex) {
         .notNullable()
         .unique();
       Yelp.string("image_url");
-    })
-    .createTable("google_users", gUsers => {
-      gUsers.integer('gUser_id')
-        .primary()
-        .notNullable();
-      gUsers.string("first_name").notNullable();
-      gUsers.string("last_name").notNullable();
-      gUsers.string("email")
-        .unique()
-        .notNullable();
-      gUsers.timestamp("created at").defaultTo(knex.fn.now());
-      gUsers.json("preferences")
     })
 };
 
