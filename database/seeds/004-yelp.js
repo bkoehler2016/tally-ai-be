@@ -1,5 +1,5 @@
 exports.seed = function(knex) {
-  return knex("yelp").insert([
+  return knex("tallyweb.yelp").insert([
     {
       id: 1,
       business_id: 1,

@@ -1,7 +1,7 @@
 
 exports.up = function (knex) {
     return knex.schema
-        .createTable('users_favorites', Fav => {
+        .createTable('tallyweb.users_favorites', Fav => {
             Fav.increments();
             // Foreign Key: user_id
             Fav.integer('user_id')
@@ -21,5 +21,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-    return knex.schema.dropTableIfExists('users_favorites');
+    return knex.schema.dropTableIfExists('tallyweb.users_favorites');
 };
