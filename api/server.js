@@ -17,9 +17,9 @@ server.use(cors());
 server.use(express.json());
 
 server.use((req, res, next) => {
-    res.header(
+    res.setHeader(
         "Access-Control-Allow-Origin", process.env.ORIGIN)
-    res.header(
+    res.setHeader(
         'Access-Control-Allow-Headers',
         "Origin, X-Requested-With, Content-Type, Accept, Credentials, Authorization"
     )
