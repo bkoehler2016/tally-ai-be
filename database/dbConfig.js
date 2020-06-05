@@ -14,7 +14,7 @@
 
 //makeachange
 
-const knex = require("knex");
+const knex = require("knex")(process.env.ENVIRONMENT);
 
 const config = require("../knexfile");
 
