@@ -17,18 +17,12 @@ server.use(cors());
 server.use(express.json());
 
 server.use((req, res, next) => {
-    res.setHeader(
+    res.header(
         "Access-Control-Allow-Origin", process.env.ORIGIN)
-    res.setHeader(
+    res.header(
         'Access-Control-Allow-Headers',
         "Origin, X-Requested-With, Content-Type, Accept, Credentials, Authorization"
     )
-
-    if (req.method === 'OPTIONS') {
-        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE')
-        return res.status(200).json({})
-    }
-    next()
 })
 
 server.use("/api/auth", authRouter);
