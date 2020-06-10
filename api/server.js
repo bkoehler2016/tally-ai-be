@@ -16,14 +16,14 @@ server.use(helmet());
 server.use(cors());
 server.use(express.json());
 
-server.use((req, res) => {
-    res.header(
-        "Access-Control-Allow-Origin", process.env.ORIGIN)
-    res.header(
-        'Access-Control-Allow-Headers',
-        "Origin, X-Requested-With, Content-Type, Accept, Credentials, Authorization"
-    )
-})
+// server.use((req, res) => {
+//     res.header(
+//         "Access-Control-Allow-Origin", process.env.ORIGIN)
+//     res.header(
+//         'Access-Control-Allow-Headers',
+//         "Origin, X-Requested-With, Content-Type, Accept, Credentials, Authorization"
+//     )
+// })
 
 server.use("/api/auth", authRouter);
 server.use("/api/users", authMiddleware, usersRouter);
