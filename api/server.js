@@ -13,17 +13,17 @@ const authMiddleware = require("../auth/authenticate-middleware");
 const server = express();
 
 server.use(helmet());
-server.use(cors());
+// server.use(cors());
 server.use(express.json());
 
-// server.use((req, res) => {
-//     res.header(
-//         "Access-Control-Allow-Origin", process.env.ORIGIN)
-//     res.header(
-//         'Access-Control-Allow-Headers',
-//         "Origin, X-Requested-With, Content-Type, Accept, Credentials, Authorization"
-//     )
-// })
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", process.env.ORIGIN)
+    res.header("Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    )
+    res.header("Access-Control-Allow-Methods", "GET,PUT,PATCH,POST,DELETE")
+    next()
+})
 
 server.use("/api/auth", authRouter);
 server.use("/api/users", authMiddleware, usersRouter);
