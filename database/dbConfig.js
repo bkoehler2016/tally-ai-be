@@ -1,4 +1,4 @@
-const dbEnv = process.env.ENVIRONMENT || 'development'
+const dbEnv = process.env.ENVIRONMENT || 'testing'
 
 const knex = require("knex")(dbEnv)
 
