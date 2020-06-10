@@ -16,7 +16,7 @@ server.use(helmet());
 server.use(cors());
 server.use(express.json());
 
-server.use((req, res, next) => {
+server.use((req, res) => {
     res.header(
         "Access-Control-Allow-Origin", process.env.ORIGIN)
     res.header(
