@@ -16,10 +16,10 @@ module.exports = {
     }
   },
 
-  staging: {
+  testing: {
     client: "pg",
     useNullAsDefault: true,
-    connection: process.env.DATABASE_URL + "?ssl=1",
+    connection: process.env.DATABASE_URL
     pool: {
       min: 2,
       max: 10
