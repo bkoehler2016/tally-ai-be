@@ -11,13 +11,3 @@ if (environment === "production") {
 } else {
   module.exports = knex(knexConfig.testing);
 }
-
-// makeachange
-
-// const knex = require("knex")(process.env.ENVIRONMENT);
-
-// const config = require("../knexfile");
-
-// const dbEnv = process.env.ENVIRONMENT || 'testing'
-
-// module.exports = knex(config[dbEnv]);
