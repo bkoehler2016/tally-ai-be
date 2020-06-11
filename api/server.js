@@ -13,7 +13,7 @@ const authMiddleware = require("../auth/authenticate-middleware");
 const server = express();
 
 server.use(helmet());
-// server.use(cors());
+server.use(cors());
 server.use(express.json());
 
 server.use(function (req, res, next) {
