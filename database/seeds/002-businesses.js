@@ -1,5 +1,5 @@
 exports.seed = function (knex) {
-  return knex("businesses").insert([
+  return knex("tallyweb.businesses").insert([
     {
       "id": 1,
       "name": "First Draft Book Bar",

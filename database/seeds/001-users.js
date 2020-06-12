@@ -1,7 +1,7 @@
 
 exports.seed = function (knex) {
 
-  return knex('users').insert([
+  return knex('tallyweb.users').insert([
     {
       "id": 1, 'first_name': 'PrincessConsuela', 'last_name': 'BananaHammock', 'email': 'phoebe@123.com', 'password': 'lambdarox'
     },
