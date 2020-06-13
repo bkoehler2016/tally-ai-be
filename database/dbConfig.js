@@ -1,7 +1,13 @@
 const knex = require("knex");
 
-const config = require("../knexfile");
+const knexConfig = require("../knexfile.js");
 
-const dbEnv = process.env.ENVIRONMENT || 'testing'
+const environment = process.env.ENVIRONMENT;
 
-module.exports = knex(config[dbEnv]);
+if (environment === "production") {
+  module.exports = knex(knexConfig.production);
+} else if (environment === "testing") {
+  module.exports = knex(knexConfig.testing);
+} else {
+  module.exports = knex(knexConfig.testing);
+}
