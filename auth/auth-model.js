@@ -5,8 +5,7 @@ function find() {
 }
 
 function findBy(filter) {
-  return db("tallyweb.users")
-        .where(filter);
+  return db('tallyweb.users').where(filter);
 }
 
 

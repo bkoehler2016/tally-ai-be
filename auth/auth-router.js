@@ -6,20 +6,36 @@ const secret = require("../database/secrets");
 
 const { validateUser } = require('./auth-helpers');
 
-
 router.get('/', (req, res) => {
   Users.find()
-  .then(getUser => {
-    res.status(200).json(getUser)
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(500).json({message: 'There was an error'})
+    .then(getUser => {
+      res.json(getUser);
+    })
+    .catch(err => res.send(err))
+});
 
-  })
-})
+// router.post("/register", (req, res) => {
+//   const user = req.body;
 
+//   const hash = bcrypt.hashSync(user.password, 12);
+//   user.password = hash;
 
+//   Users.add(user)
+//     .then(userN => {
+//       const token = getJwtToken(userN);
+
+//       Users.findByName(userN.first_name)
+//       .then(newUser => {
+//         console.log(newUser)
+//         res.status(200).json({ message: 'User registered.', id: newUser[0].id, token: token });
+//       })
+//       .catch(err => res.status(500).json('Unable to retrieve new user.'))
+//     })
+//     .catch(error => {
+//       console.log(error);
+//       res.status(500).json(error);
+//     });
+// });
 
 router.post("/register", async (req, res) => {
   const user = req.body;
@@ -35,13 +51,11 @@ router.post("/register", async (req, res) => {
         const token = getJwtToken(userN.email, userN.password);
         res.status(200).json({ userN, token })
       })
-      .catch(err => {
-        console.log(err)
-        res.status(500).json({message: 'Unable to add new user'})
-      })
-    } else {
+      .catch(error => res.status(500).json({ message: 'Unable to retrieve new user.', error }))
+  } else {
     res.status(400).json({ errors });
   }
+
 })
 
 router.post("/login", (req, res) => {
@@ -81,4 +95,4 @@ function getJwtToken(email, password) {
 
   return jwt.sign(payload, secret.jwtSecret, options);
 }
-module.exports = router
+module.exports = router;
