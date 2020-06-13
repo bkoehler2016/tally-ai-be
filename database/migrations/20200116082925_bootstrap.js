@@ -1,6 +1,6 @@
 exports.up = function(knex) {
   return knex.schema
-    .createTable("users", Users => {
+    .createTable("tallyweb.users", Users => {
       Users.increments();
       Users.string("first_name").notNullable();
       Users.string("last_name").notNullable();
@@ -11,25 +11,13 @@ exports.up = function(knex) {
       Users.timestamp("created at").defaultTo(knex.fn.now());
       Users.json("preferences");
     })
-    .createTable("google_users", gUsers => {
-      gUsers.integer('gUser_id')
-        .primary()
-        .notNullable();
-      gUsers.string("first_name").notNullable();
-      gUsers.string("last_name").notNullable();
-      gUsers.string("email")
-        .unique()
-        .notNullable();
-      gUsers.timestamp("created at").defaultTo(knex.fn.now());
-      gUsers.json("preferences")
-    })
-    .createTable("businesses", Businesses => {
+    .createTable("tallyweb.businesses", Businesses => {
       Businesses.increments();
       Businesses.string("name").notNullable();
       Businesses.string("city").notNullable();
       Businesses.string("state").notNullable();
     })
-    .createTable("users_businesses", UsersBusinesses => {
+    .createTable("tallyweb.users_businesses", UsersBusinesses => {
       UsersBusinesses.increments();
       // Foreign Key - references users
       UsersBusinesses.integer("user_id")
@@ -67,9 +55,8 @@ exports.up = function(knex) {
 
 exports.down = function(knex) {
   return knex.schema
-    .dropTableIfExists("yelp")
-    .dropTableIfExists("users_businesses")
-    .dropTableIfExists("businesses")
-    .dropTableIfExists("users")
-    .dropTableIfExists("google_users");
+    .dropTableIfExists("tallyweb.yelp")
+    .dropTableIfExists("tallyweb.users_businesses")
+    .dropTableIfExists("tallyweb.businesses")
+    .dropTableIfExists("tallyweb.users");
 };

@@ -16,13 +16,17 @@ module.exports = {
     }
   },
 
-  staging: {
+  testing: {
     client: "pg",
     useNullAsDefault: true,
-    connection: process.env.DATABASE_URL + "?ssl=1",
+    connection: `postgres://${process.env.DB_PRODUCTION_USER}:${process.env.DB_PRODUCTION_PW}@${process.env.DB_PRODUCTION_HOST}:${process.env.DB_PRODUCTION_PORT}/${process.env.DATABASE_TESTING}`,
+    searchPath:['tallyweb', 'public'],
+    options:{
+      schema: 'tallyweb'
+    },
     pool: {
-      min: 2,
-      max: 10
+      min: 0,
+      max: 7
     },
     migrations: {
       directory: "./database/migrations",
@@ -37,16 +41,10 @@ module.exports = {
     client: "pg",
     useNullAsDefault: true,
     connection: `postgres://${process.env.DB_PRODUCTION_USER}:${process.env.DB_PRODUCTION_PW}@${process.env.DB_PRODUCTION_HOST}:${process.env.DB_PRODUCTION_PORT}/${process.env.DATABASE_PRODUCTION}`,
-    //process.env.DATABASE_URL + '?ssl=1',
-    // {
-    //   host: process.env.DB_PRODUCTION_HOST,
-    //   user: process.env.DB_PRODUCTION_USER,
-    //   password: process.env.DB_PRODUCTION_PW,
-    //   database: process.env.DATABASE_PRODUCTION,
-    //   options: {
-    //     port: process.env.DB_PRODUCTION_PORT
-    //   }
-    // },
+    searchPath:['tallyweb', 'public'],
+    options:{
+      schema: 'tallyweb'
+    },
     pool: {
       min: 0,
       max: 7
