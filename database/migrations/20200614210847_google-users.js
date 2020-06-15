@@ -3,7 +3,8 @@ exports.up = function(knex) {
     return knex.schema
         .createTable("tallyweb.gUsers", gUser => {
             gUser.increments();
-            gUser.integer("google_id")
+            gUser.string("google_id")
+            .unique()
             .notNullable();
             gUser.string("first_name").notNullable();
             gUser.string("last_name").notNullable();
@@ -15,9 +16,9 @@ exports.up = function(knex) {
         .createTable("tallyweb.gUsers_businesses", gUsersBusinesses => {
             gUsersBusinesses.increments();
             // Foreign Key - references users
-            gUsersBusinesses.integer("gUser_id")
+            gUsersBusinesses.string("gUser_id")
             .unsigned()
-            .references("id")
+            .references("google_id")
             .inTable("gUsers")
             .onDelete("CASCADE")
             .onUpdate("CASCADE");
