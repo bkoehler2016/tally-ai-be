@@ -20,21 +20,42 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: "http://localhost:6000/google/callback"
   },
-  async function(accessToken, refreshToken, profile, done) {
+  function(accessToken, refreshToken, profile, done) {
     console.log("ASYNC FUNCTION PROFILE START")
-    const existing = await User.findById(profile.id)
-      if (!existing) {
-        await User.add(profile)
-          .then(user => {
-            console.log('MADE IT')
-            res.status(200).json({ user });
-          })
-          .catch(err => {
-            res.status(500).json({message: 'Unable to add Google user'})
-          })
-      }
-      console.log("ASYNC FUNCTION PROFILE END") 
-    return done(err, profile);
+    const newProfile = {
+      google_id: profile.id,
+      first_name: profile.name.givenName,
+      last_name: profile.name.familyName,
+      email: profile._json.email
+    };
+    // const existing = await User.findById(profile.id)
+    //   if (!existing) {
+    //     await User.add(newProfile)
+    //       .then(user => {
+    //         console.log('MADE IT')
+    //         res.status(200).json({ user });
+    //       })
+    //       .catch(err => {
+    //         res.status(500).json({message: 'Unable to add Google user'})
+    //       })
+    //   }
+    //   console.log("ASYNC FUNCTION PROFILE END") 
+    // return done(err, profile);
+    User.findById(newProfile.google_id)
+      .then(existing => {
+        if(existing) {
+          console.log('This user exists!')
+        } else {
+          User.add(newProfile)
+              .then(user => {
+                console.log('MADE IT')
+                res.status(200).json({ user });
+              })
+              .catch(err => {
+                res.status(500).json({message: 'Unable to add Google user'})
+              })
+        }
+      })
   }
 ));
 
