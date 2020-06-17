@@ -5,54 +5,44 @@ const User = require('./google-model');
 
 passport.serializeUser(function(user, done) {
   console.log("SERIALIZED USER YAS")
-    done(null, user.id);
+    done(null, user.email);
   });
   
-  passport.deserializeUser(function(id, done) {
-    console.log("DESERIALIZED USER YAS")
-    User.findById(id, function(err, user) {
-      done(err, user);
-    });
-  });
+passport.deserializeUser(function(email, done) {
+  console.log("DESERIALIZED USER YAS")
+  User.findByEmail(email).then(gUser => {
+    done(null, gUser);
+  })
+});
 
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: "http://localhost:6000/google/callback"
   },
-  function(accessToken, refreshToken, profile, done) {
+  async function(accessToken, refreshToken, profile, done) {
     console.log("ASYNC FUNCTION PROFILE START")
+
     const newProfile = {
       google_id: profile.id,
       first_name: profile.name.givenName,
       last_name: profile.name.familyName,
       email: profile._json.email
     };
-    // const existing = await User.findById(profile.id)
-    //   if (!existing) {
-    //     await User.add(newProfile)
-    //       .then(user => {
-    //         console.log('MADE IT')
-    //         res.status(200).json({ user });
-    //       })
-    //       .catch(err => {
-    //         res.status(500).json({message: 'Unable to add Google user'})
-    //       })
-    //   }
-    //   console.log("ASYNC FUNCTION PROFILE END") 
-    // return done(err, profile);
-    User.findById(newProfile.google_id)
+
+    User.findByEmail(newProfile.email)
       .then(existing => {
         if(existing) {
-          console.log('This user exists!')
+          console.log('This user exists!');
+          done(null, existing)
         } else {
           User.add(newProfile)
               .then(user => {
-                console.log('MADE IT')
-                res.status(200).json({ user });
+                console.log('Successfully added Google User to the DB')
+                done(null, user);
               })
               .catch(err => {
-                res.status(500).json({message: 'Unable to add Google user'})
+                console.log('Error saving Google User to the DB', err)
               })
         }
       })
