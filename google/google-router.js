@@ -1,6 +1,8 @@
 const passport = require('passport');
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const app = express();
+const secret = require('../database/secrets');
 require('./passport');
 
 // PASSPORT MIDDLEWARE
@@ -25,8 +27,25 @@ app.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/auth/google/failed' }),
   function(req, res) {
     // Successful authentication, redirect home.
-    res.redirect('/dashboard');
+    const authToken = getJwtToken(req.user.email, req.user.google_id)
+    res.status(200).send({message: `Welcome ${req.user.first_name}!`,
+    id: req.user.google_id,
+    token: authToken});
   }
   );
+
+
+  function getJwtToken(email, id) {
+    const payload = {
+      email,
+      id
+    };
+  
+    const options = {
+      expiresIn: "7d"
+    };
+  
+    return jwt.sign(payload, secret.jwtSecret, options);
+  }
 
 module.exports = app;
