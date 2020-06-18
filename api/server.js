@@ -16,7 +16,7 @@ const server = express();
 
 // COOKIE SESSION CONFIG
 server.use(cookieSession({
-    name: 'googleUser-session',
+    name: 'token',
     keys: ['key1', 'key2'],
 }))
 
