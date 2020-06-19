@@ -16,6 +16,8 @@ server.use(helmet());
 server.use(cors());
 server.use(express.json());
 
+// CORS HEADERS
+
 server.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", process.env.ORIGIN)
     res.header("Access-Control-Allow-Headers",
@@ -24,6 +26,8 @@ server.use(function (req, res, next) {
     res.header("Access-Control-Allow-Methods", "HEAD,GET,PUT,POST,DELETE")
     next()
 })
+
+// ROUTES
 
 server.use("/api/auth", authRouter);
 server.use("/api/users", authMiddleware, usersRouter);

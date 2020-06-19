@@ -3,39 +3,41 @@ const request = require('supertest');
 const server = require('../api/server');
 
 const db = require('../database/dbConfig');
+const { JsonWebTokenError } = require('jsonwebtoken');
+
+const {
+        goodRegistration,
+        badRegistration,
+        goodLogin,
+        badLogin
+      } = require('../test_params');
+
+
 
 describe('CRUD Tests', () => {
   beforeAll(async () => {
-    await db("users").truncate();
+    await db.raw('TRUNCATE users RESTART IDENTITY CASCADE')
   });
 
   it("tests are running with DB_ENV set to 'testing'", () => {
-    expect(process.env.ENVIRONMENT).toBe("development");
+    expect(process.env.ENVIRONMENT).toBe("testing");
   });
 
   describe("auth-router tests", () => {
+    jest.setTimeout(30000)
     describe("POST /api/auth/register", () => {
-      it("should return a 201 created status", () => {
-        return request(server)
+      it("should return a 201 created status", async () => {
+        return await request(server)
           .post("/api/auth/register")
-          .send({
-            email: "robert2@email.com",
-            password: "password",
-            first_name: "first",
-            last_name: "last"
-          })
+          .send(goodRegistration)
           .then(res => {
             expect(res.status).toBe(200);
           });
       });
-      it("should return a JSON object after creating a user", () => {
-        return request(server)
+      it("should return a JSON object after creating a user", async () => {
+        return await request(server)
           .post("/api/auth/register")
-          .send({
-            username: "Dave",
-            password: "pass",
-            isServiceWorker: 1
-          })
+          .send(goodRegistration)
           .then(res => {
             expect(res.type).toEqual("application/json");
           });
@@ -44,20 +46,16 @@ describe('CRUD Tests', () => {
   })
 
   describe("POST /api/auth/login", () => {
-    it("should return a 200 OK status", () => {
-      return request(server)
+    it("should return a 200 OK status", async () => {
+      return await request(server)
         .post("/api/auth/login")
-        .send({
-          username: "Dave",
-          password: "pass",
-          isServiceWorker: 1
-        })
+        .send(goodLogin)
         .then(res => {
           expect(res.status).toBe(200);
         });
     });
-    it("should return a JSON object", () => {
-      return request(server)
+    it("should return a JSON object", async () => {
+      return await request(server)
         .post("/api/auth/login")
         .send({
           username: "Dave",
@@ -68,6 +66,5 @@ describe('CRUD Tests', () => {
           expect(res.type).toMatch(/json/);
         });
     });
-  });
-
+  })
 })
