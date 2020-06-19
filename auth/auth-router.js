@@ -22,6 +22,7 @@ router.get('/', (req, res) => {
 
 
 router.post("/register", async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   const user = req.body;
 
   const { isSuccessful, errors } = await validateUser(user);
@@ -45,6 +46,7 @@ router.post("/register", async (req, res) => {
 })
 
 router.post("/login", (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   let { email, password } = req.body;
 
   Users.findBy({ email })

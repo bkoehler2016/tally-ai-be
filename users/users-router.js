@@ -9,6 +9,7 @@ const middleware = require("./validate-id-middleware");
 
 // CHANGE USER CREDENTIALS
 router.put("/:id", middleware, (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   const changes = req.body;
   console.log(`\nPUT changes:\n${changes}\n`);
   Users.update(req.params.id, changes)
@@ -27,6 +28,7 @@ router.put("/:id", middleware, (req, res) => {
 
 // DELETE USER
 router.delete("/:id", middleware, (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   Users.destroy(req.params.id)
     .then(count => {
       if (count > 0) {
@@ -43,6 +45,7 @@ router.delete("/:id", middleware, (req, res) => {
 
 // GET USER INFO
 router.get('/:id', middleware, (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   const { id } = req.params;
   Users.getUsers(id)
     .then(data => {
@@ -55,6 +58,7 @@ router.get('/:id', middleware, (req, res) => {
 // ADD BUSINESS
 // TODO: Return formattedBusinesses; need to adjust front end to account for the different format.
 router.post('/:id/business', middleware, (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   const id = req.params.id;
   Users.insertBusiness(req.body, id)
     .then(async event => {
@@ -79,6 +83,7 @@ router.post('/:id/business', middleware, (req, res) => {
 // ADD FAVORITE
 // TODO: Return formattedFavorites; need to adjust front end to account for the different format.
 router.post('/:id/favorite', middleware, (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   const id = req.params.id;
   Users.insertFavorite(req.body, id)
     .then(async event => {
@@ -101,6 +106,7 @@ router.post('/:id/favorite', middleware, (req, res) => {
 // DELETE BUSINESS
 // TODO: Return formattedBusinesses; need to adjust front end to account for the different format.
 router.delete('/:id/business/:bID', middleware, (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   Users.destroyBusiness(req.params.bID)
     .then(async event => {
       if (!event) {
@@ -121,6 +127,7 @@ router.delete('/:id/business/:bID', middleware, (req, res) => {
 // DELETE FAVORITE
 // TODO: Return formattedFavorites; need to adjust front end to account for the different format.
 router.delete('/:id/favorite/:bID', middleware, (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
   Users.destroyFavorite(req.params.bID)
     .then(async event => {
       if (!event) {
