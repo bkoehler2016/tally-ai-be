@@ -50,7 +50,7 @@ exports.up = function(knex) {
         .notNullable()
         .unique();
       Yelp.string("image_url");
-    });
+    })
 };
 
 exports.down = function(knex) {
