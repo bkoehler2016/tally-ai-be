@@ -30,22 +30,21 @@ passport.use(new GoogleStrategy({
       email: profile._json.email
     };
 
-    User.findByEmail(newProfile.email)
-      .then(existing => {
-        if(existing) {
-          console.log('This user exists!');
-          done(null, existing)
-        } else {
-          User.add(newProfile)
-              .then(user => {
-                console.log('Successfully added Google User to the DB')
-                done(null, user);
-              })
-              .catch(err => {
-                console.log('Error saving Google User to the DB', err)
-              })
-        }
-      })
+      User.findByEmail(newProfile.email)
+        .then(existing => {
+          if(existing) {
+            console.log('This user exists!');
+            done(null, existing)
+          } else {
+            User.add(newProfile)
+                .then(user => {
+                  console.log('Successfully added Google User to the DB')
+                  done(null, user);
+                })
+                .catch(err => {
+                  console.log('Error saving Google User to the DB', err)
+                })
+          }
+        })
   }
 ));
-

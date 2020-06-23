@@ -16,21 +16,23 @@ app.get('/auth/google/failed', (req, res) => res.send('Failed to log in'))
 
 app.get('/google/logout', (req, res) => {
   req.session = null;
-  req.logout();
+  req.logout(); 
   res.redirect('/google/yay')
 })
 
-app.get('/dashboard', (req, res) => res.send(`Welcome ${req.user.email}`))
+app.get('/some-page', async (req, res) => {
+  const authToken = getJwtToken(req.user.email, req.user.google_id)
+  res.json({message: `Welcome ${req.user.first_name}!`,
+  id: req.user.google_id,
+  token: authToken});
+})
 app.get('/google/yay', (req, res) => res.send(`Successfully Logged out!`));
 
 app.get('/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/auth/google/failed' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    const authToken = getJwtToken(req.user.email, req.user.google_id)
-    res.status(200).send({message: `Welcome ${req.user.first_name}!`,
-    id: req.user.google_id,
-    token: authToken});
+  passport.authenticate('google', 
+  ),
+  (req, res) => {
+    res.redirect('http://localhost:3000/dashboard')
   }
   );
 
