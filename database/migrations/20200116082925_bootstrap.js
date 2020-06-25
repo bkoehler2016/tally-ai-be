@@ -11,12 +11,6 @@ exports.up = function(knex) {
       Users.timestamp("created at").defaultTo(knex.fn.now());
       Users.json("preferences");
     })
-    .createTable("tallyweb.businesses", Businesses => {
-      Businesses.increments();
-      Businesses.string("name").notNullable();
-      Businesses.string("city").notNullable();
-      Businesses.string("state").notNullable();
-    })
     .createTable("tallyweb.users_businesses", UsersBusinesses => {
       UsersBusinesses.increments();
       // Foreign Key - references users
