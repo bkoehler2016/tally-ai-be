@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs')
 
 const getBusinessses = async () => {
  const result = await db.raw(
-    `SELECT * FROM tallyweb.business`
+    `SELECT * FROM tallyds.business`
   )
   return result
  }
@@ -13,10 +13,12 @@ const getBusinessses = async () => {
 async function findBusinessByID(id) {
 
   const result = await db.raw(
-    `SELECT * FROM tallyweb.business WHERE business_id = '${id}' `
+    `SELECT * FROM tallyds.business WHERE business_id = '${id}' `
   );
   return result.rows
 }
+
+
 
 
 

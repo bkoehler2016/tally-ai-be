@@ -33,8 +33,8 @@ server.use(function (req, res, next) {
 
 server.use("/api/auth", authRouter);
 server.use("/api/users", authMiddleware, usersRouter);
-server.use('/api/google', googleRouter);
 server.use('/api/business', authMiddleware, businessRouter)
+server.use('/', googleRouter);
 
 server.get('/', (req, res) => {
     res.status(200).json(`Sanity Check`);

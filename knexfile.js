@@ -41,9 +41,9 @@ module.exports = {
     client: "pg",
     useNullAsDefault: true,
     connection: `postgres://${process.env.DB_PRODUCTION_USER}:${process.env.DB_PRODUCTION_PW}@${process.env.DB_PRODUCTION_HOST}:${process.env.DB_PRODUCTION_PORT}/${process.env.DATABASE_PRODUCTION}`,
-    searchPath:['tallyweb', 'public'],
+    searchPath:['tallyweb', 'tallyds'],
     options:{
-      schema: 'tallyweb'
+      schema: ['tallyweb', 'tallyds']
     },
     pool: {
       min: 0,

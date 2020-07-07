@@ -56,29 +56,43 @@ router.get('/:id', middleware, (req, res) => {
 });
 
 // ADD BUSINESS
-// TODO: Return formattedBusinesses; need to adjust front end to account for the different format.
 router.post('/:id/business', middleware, (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   const id = req.params.id;
-  Users.insertBusiness(req.body, id)
-    .then(async event => {
-      try {
-        const businesses = await Users.getBusinesses(id);
-        console.log("Businesses in POST business:\n", businesses);
-        const formattedBusinesses = helpers.formatBusinesses(businesses);
-        // TODO: Replace businesses: businesses with businesses: formattedBusinesses
-        res.status(201).json({ event, businesses: businesses, message: "User Business posted" });
-      } catch (error) {
-        console.log(`Error fetching businesses after insert:\n${error}\n`);
-        res.status(404).json({ error, message: "Error fetching businesses after insert." });
+  if(!req.body.business_id){
+    res.status(401).json({error: 'Please include the business ID'})
+  } else {
+  const bizId = req.body.business_id
+  Users.addUserBusiness(id, bizId)
+    .then(business => {
+      if(!business){
+        res.status(400).json({error: "Business not added"})
+      } else {
+        res.status(201).json({message: 'Added', Data: business})
       }
-      res.status(201).json({ event, message: "User Business posted" });
     })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ err, message: "User Business failed to post" });
-    });
+    .catch(error => {
+      console.log(`There was an error adding a users business: ${error}`);
+
+      res.status(500).json({error: 'There was an error adding the business'})
+    })
+  }
 })
+
+// GET USERS BUSINESS WITH DETAILS
+router.get('/:id/businessinfo', middleware, (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
+  const id = req.params.id
+  Users.getUserBusinessInfo(id)
+    .then(businesses => {
+      if(!businesses) {
+        res.status(404).json({error: 'No businesses for this user'})
+      } else {
+        res.status(200).json({message: "Success", data: businesses})
+      }
+    })
+})
+
 
 // ADD FAVORITE
 // TODO: Return formattedFavorites; need to adjust front end to account for the different format.
