@@ -53,7 +53,7 @@ function getUserInfo(id) {
 
 function getBusinesses(id) {
   return db('tallyweb.users as u')
-    .join("tallyweb.users_businesses as ub", "ub.user_id", "u.id")
+    .join("tallyweb.users_business as ub", "ub.user_id", "u.id")
     .join("tallyweb.businesses as b", "b.id", "ub.business_id")
     .join("tallyweb.yelp as yb", "yb.business_id", "b.id")
     .where({ "u.id": id })
@@ -99,7 +99,7 @@ async function addUserBusiness(user_id, business_id) {
 //         return { message: "Already added this business." }
 //       } else {
 //         try {
-//           await db('tallyweb.users_businesses').insert({ business_id: biz_id, user_id }, "id")
+//           await db('tallyweb.users_business').insert({ business_id: biz_id, user_id }, "id")
 //           return ({ business_id: biz_id, yelp_id: yelp.yelp_id });
 //         } catch (error) {
 //           return error;
@@ -114,8 +114,8 @@ async function addUserBusiness(user_id, business_id) {
 //       // Insert into yelp table after adding business_id
 //       const [yelp_id] = await db('tallyweb.yelp').insert({ business_id, ...yelp, }, "id");
 //       console.log("yelp_id from insert: ", yelp_id)
-//       // Insert into users_businesses table
-//       await db('tallyweb.users_businesses').insert({ business_id, user_id }, "id")
+//       // Insert into users_business table
+//       await db('tallyweb.users_business').insert({ business_id, user_id }, "id")
 
 //       return ({ business_id, yelp_id });
 //     }
@@ -145,7 +145,7 @@ function destroy(id) {
 }
 
 function destroyBusiness(id) {
-  return db("tallyweb.users_businesses")
+  return db("tallyweb.users_business")
     .where("business_id", id)
     .del();
 }
@@ -190,7 +190,7 @@ async function insertFavorite(business, user_id) {
       // Insert into yelp table after adding business_id
       const [yelp_id] = await db('tallyweb.yelp').insert({ business_id, ...yelp, }, "id");
       console.log("yelp_id from insert: ", yelp_id)
-      // Insert into users_businesses table
+      // Insert into users_business table
       await db('tallyweb.users_favorites').insert({ business_id, user_id }, "id")
 
       return ({ business_id, yelp_id });
@@ -220,6 +220,6 @@ async function alreadyFavorited(user_id, business_id) {
 }
 
 async function alreadyAddedBusiness(user_id, business_id) {
-  const added = await db("tallyweb.users_businesses").select("*").where({ user_id, business_id });
+  const added = await db("tallyweb.users_business").select("*").where({ user_id, business_id });
   return added.length > 0;
 }
