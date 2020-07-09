@@ -12,24 +12,14 @@ const formatUserData = data => {
                 name: business.name,
                 city: business.city,
                 state: business.state,
-                yelp: {
-                    yelp_id: business.yelp_id,
-                    url: business.url,
-                    image_url: business.image_url
-                }
             }))
             : [],
-        favorites: data.favorites.length
-            ? data.favorites.map(favorite => ({
-                id: favorite.id,
-                name: favorite.name,
-                city: favorite.city,
-                state: favorite.state,
-                yelp: {
-                    yelp_id: favorite.yelp_id,
-                    url: favorite.url,
-                    image_url: favorite.image_url
-                }
+        favorites: data.competition.length
+            ? data.competition.map(competition => ({
+                id: competition.id,
+                name: competition.name,
+                city: competition.city,
+                state: competition.state,
             }))
             : []
     };
@@ -43,11 +33,6 @@ const formatBusinesses = businesses => businesses.map(business => ({
     name: business.name,
     city: business.city,
     state: business.state,
-    yelp: {
-        yelp_id: business.yelp_id,
-        url: business.url,
-        image_url: business.image_url
-    }
 }))
 
 
