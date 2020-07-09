@@ -5,17 +5,12 @@ const bcrypt = require('bcryptjs');
 module.exports = {
   getUsers,
   getUserId,
-  getBusinesses,
   getUserBusinessInfo,
-  // getFavorites,
-  // findByBusinessID,
-  // insertBusiness,
+  getUserBusinessCompetitionInfo,
   addUserBusiness,
-  insertFavorite,
-  update,
-  destroy,
-  destroyBusiness,
-  destroyFavorite
+  addUserCompetition,
+  removeUsersBusiness,
+  removeUsersCompetition
 };
 
 function getUserId(filter) {
@@ -29,16 +24,13 @@ async function getUsers(id) {
       throw new Error("User not found.");
     }
     console.log("User in users-model:\n", user);
-    // const parsedUser = {
-    //   ...user, preferences: user.preferences ? JSON.parse(user.preferences) : {}
-    // };
-    // console.log("parsed user in users-model: ", parsedUser);
-    const businesses = await getBusinesses(id);
-    const favorites = await getFavorites(id);
+
+    const businesses = await getuserBusinessInfo(id);
+    const competition = await getUserBusinessCompetitionInfo(id);
     return ({
       ...user,
       businesses,
-      favorites
+      competition
     })
   } catch (error) {
     return error;
@@ -49,24 +41,7 @@ function getUserInfo(id) {
   return db("tallyweb.users as u").where({ "u.id": id }).select("*").first();
 }
 
-
-
-function getBusinesses(id) {
-  return db('tallyweb.users as u')
-    .join("tallyweb.users_business as ub", "ub.user_id", "u.id")
-    .join("tallyweb.businesses as b", "b.id", "ub.business_id")
-    .join("tallyweb.yelp as yb", "yb.business_id", "b.id")
-    .where({ "u.id": id })
-    .select(
-      "b.id", "b.name", "b.city", "b.state", // businesses
-      "yb.yelp_id", "yb.url", "yb.image_url" // yelp
-    )
-}
-
-
 function getUserBusinessInfo(id) {
-  console.log(`User ID Passed into getUserBusinessInfo: ${id}`);
-
   return db('tallyweb.users as u')
     .join("tallyweb.users_business as ub", "ub.user_id", "u.id")
     .join("tallyds.business as f", "ub.business_id", "f.business_id")
@@ -76,145 +51,39 @@ function getUserBusinessInfo(id) {
       .where({ "ub.user_id": id})
 }
 
+function getUserBusinessCompetitionInfo(id) {
+  return db('tallyweb.users as u')
+    .join("tallyweb.users_competitors as ub", "ub.user_id", "u.id")
+    .join("tallyds.business as f", "ub.business_id", "f.business_id")
+    .select(
+      "f.business_id", "f.name", "f.address", "f.city", "f.zipcode", 'f.latitude',
+      'f.longitude', 'f.cuisine', 'f.review_count', 'f.business_stars')
+      .where({ "ub.user_id": id})
+}
 
 async function addUserBusiness(user_id, business_id) {
   await db('tallyweb.users_business').insert({  user_id,  business_id })
   return ({ user_id, business_id });
 }
 
-
-
-// async function insertBusiness(business, user_id) {
-//   // Separate yelp data from the rest of the business object
-//   const { yelp, ...rest } = business;
-
-//   // Check if business already in the DB
-//   try {
-//     const { exists, biz_id } = await businessExists(yelp.yelp_id);
-//     console.log("Business exists? ", exists);
-//     console.log("biz_id: ", biz_id);
-//     if (exists) {
-//       const added = await alreadyAddedBusiness(user_id, biz_id);
-//       if (added) {
-//         return { message: "Already added this business." }
-//       } else {
-//         try {
-//           await db('tallyweb.users_business').insert({ business_id: biz_id, user_id }, "id")
-//           return ({ business_id: biz_id, yelp_id: yelp.yelp_id });
-//         } catch (error) {
-//           return error;
-//         }
-//       }
-
-//     } else {
-//       // Insert into businesses table
-//       console.log("Adding a new business...");
-//       const [business_id] = await db('tallyweb.businesses').insert(rest, "id");
-//       console.log("business_id from insert", business_id);
-//       // Insert into yelp table after adding business_id
-//       const [yelp_id] = await db('tallyweb.yelp').insert({ business_id, ...yelp, }, "id");
-//       console.log("yelp_id from insert: ", yelp_id)
-//       // Insert into users_business table
-//       await db('tallyweb.users_business').insert({ business_id, user_id }, "id")
-
-//       return ({ business_id, yelp_id });
-//     }
-//   } catch (error) {
-//     console.log("Error inserting business:\n", error);
-//     return error;
-//   }
-// }
-
-function update(id, changes) {
-  if (changes.preferences) {
-    changes.preferences = JSON.stringify(changes.preferences);
-  }
-  if (changes.password) {
-    changes.password = bcrypt.hashSync(changes.password, 12);
-  }
-  console.log(`\nChanges in update:\n${changes}\n`);
-  return db("tallyweb.users")
-    .where({ id })
-    .update(changes);
+async function addUserCompetition(user_id, business_id) {
+  await db('tallyweb.users_competitors').insert ({user_id, business_id})
 }
 
-function destroy(id) {
-  return db("tallyweb.users")
-    .where("id", id)
-    .del();
-}
 
-function destroyBusiness(id) {
+function removeUsersBusiness(id) {
   return db("tallyweb.users_business")
     .where("business_id", id)
     .del();
 }
 
-function destroyFavorite(id) {
-  return db("tallyweb.users_favorites")
+function removeUsersCompetition(id) {
+  return db("tallyweb.users_competitors")
     .where("business_id", id)
     .del();
 }
 
-
-async function insertFavorite(business, user_id) {
-  // Separate yelp data from the rest of the business object
-  const { yelp, ...rest } = business;
-
-  // console.log("Yelp: ", yelp);
-  console.log("Rest: ", rest);
-
-  // Check if business already in the DB
-  try {
-    const { exists, biz_id } = await businessExists(yelp.yelp_id);
-    console.log("Exists: ", exists);
-    console.log("biz_id: ", biz_id);
-    if (exists) {
-      const favorited = await alreadyFavorited(user_id, biz_id);
-      if (favorited) {
-        return { message: "Already favorited." }
-      } else {
-        try {
-          await db('tallyweb.users_favorites').insert({ business_id: biz_id, user_id }, "id")
-          return ({ business_id: biz_id, yelp_id: yelp.yelp_id });
-        } catch (error) {
-          return error;
-        }
-      }
-
-    } else {
-      // Insert into businesses table
-      console.log("In else clause");
-      const [business_id] = await db('tallyweb.businesses').insert(rest, "id");
-      console.log("business_id from insert", business_id);
-      // Insert into yelp table after adding business_id
-      const [yelp_id] = await db('tallyweb.yelp').insert({ business_id, ...yelp, }, "id");
-      console.log("yelp_id from insert: ", yelp_id)
-      // Insert into users_business table
-      await db('tallyweb.users_favorites').insert({ business_id, user_id }, "id")
-
-      return ({ business_id, yelp_id });
-    }
-  } catch (error) {
-    console.log("Error inserting favorite:\n", error);
-    return error;
-  }
-}
-
-async function businessExists(yelp_id) {
-  const yelp = await db('tallyweb.yelp as y')
-    .select("y.business_id")
-    .where({ 'y.yelp_id': yelp_id });
-  console.log("Yelp in businessExists: ", yelp);
-  console.log("Yelp length > 0: ", yelp.length > 0);
-  // console.log("Yelp[0].business_id: ", yelp[0]);
-  return {
-    exists: yelp.length > 0,
-    biz_id: yelp.length > 0 ? yelp[0].business_id : undefined
-  };
-}
-
-async function alreadyFavorited(user_id, business_id) {
+async function alreadyCompetition(user_id, business_id) {
   const favorited = await db("tallyweb.users_favorites").select("*").where({ user_id, business_id });
   return favorited.length > 0;
 }

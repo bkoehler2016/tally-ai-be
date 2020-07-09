@@ -99,10 +99,10 @@ router.get('/:id/businessinfo', middleware, (req, res) => {
 router.post('/:id/favorite', middleware, (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   const id = req.params.id;
-  Users.insertFavorite(req.body, id)
+  Users.addUserCompetition(req.body, id)
     .then(async event => {
       try {
-        const favorites = await Users.getFavorites(id);
+        const favorites = await Users.getUserBusinessCompetitionInfo(id);
         const formattedFavorites = helpers.formatBusinesses(favorites);
         // TODO: Replace favorites: favorites with favorites: formattedFavorites
         res.status(201).json({ event, favorites: favorites, message: "User Favorite posted" });
@@ -121,7 +121,7 @@ router.post('/:id/favorite', middleware, (req, res) => {
 // TODO: Return formattedBusinesses; need to adjust front end to account for the different format.
 router.delete('/:id/business/:bID', middleware, (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
-  Users.destroyBusiness(req.params.bID)
+  Users.removeUsersBusiness(req.params.bID)
     .then(async event => {
       if (!event) {
         res.status(404).json({ message: "No User Business exists by that ID!" });
@@ -142,7 +142,7 @@ router.delete('/:id/business/:bID', middleware, (req, res) => {
 // TODO: Return formattedFavorites; need to adjust front end to account for the different format.
 router.delete('/:id/favorite/:bID', middleware, (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
-  Users.destroyFavorite(req.params.bID)
+  Users.removeUsersCompetition(req.params.bID)
     .then(async event => {
       if (!event) {
         res.status(404).json({ message: "No User Business exists by that ID!" });
