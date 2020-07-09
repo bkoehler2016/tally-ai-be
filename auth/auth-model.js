@@ -1,7 +1,7 @@
 const db = require('../database/dbConfig');
 
 function find() {
-  return db("tallyweb.users").select("id", "first_name", "last_name", "email", "password", "preferences");
+  return db("tallyweb.users").select("id", "first_name", "last_name", "email", "password", "preferences","type");
 }
 
 function findBy(filter) {

@@ -9,9 +9,11 @@ exports.up = function(knex) {
     users.string('email')
       .unique()
       .notNullable()
-    users.string('password').notNullable()
+    users.string('password')
     users.timestamp('created at').defaultTo(knex.fn.now())
     users.json('preferences')
+    users.string("type")
+    users.string("google_id")
   })
 
   //creating table for users owned businesses

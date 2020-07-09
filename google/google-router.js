@@ -15,11 +15,24 @@ router.post('/login', async (req, res) => {
         const token = getJwtToken(googleUser.email, googleUser.google_id);
         res.status(200).json({
           message: `Welcome ${googleUser.first_name}`,
-          id: googleUser.google_id,
+          id: userData.id,
           token: token
         });
       } else {
-        res.status(401).json({ message: 'Google User does not exist!' })
+        gUsers.add(googleUser)
+          .then(user => {
+            console.log("usr",user)
+            const token = getJwtToken(googleUser.email, googleUser.google_id);
+            res.status(200).json({
+              message: `Welcome ${googleUser.first_name}`,
+              id: user.id,
+              token: token
+            })
+          })
+          .catch(err => {
+            console.log('Error adding Google user: ', err)
+            res.status(500).json({message: `Unable to add Google user to DB`});
+          });
       }
     })
     .catch(err => {
@@ -28,26 +41,6 @@ router.post('/login', async (req, res) => {
     });
 })
 
-// Register
-router.post('/register', async (req, res) => {
-  res.set('Access-Control-Allow-Origin', '*');
-  const googleUser = req.body;
-  console.log('Incoming Google Data: ', googleUser);
-  
-  gUsers.add(googleUser)
-    .then(user => {
-      const token = getJwtToken(googleUser.email, googleUser.google_id);
-      res.status(200).json({
-        message: `Welcome ${googleUser.first_name}`,
-        id: googleUser.google_id,
-        token: token
-      })
-    })
-    .catch(err => {
-      console.log('Error adding Google user: ', err)
-      res.status(500).json({message: `Unable to add Google user to DB`});
-    });
-})
 
 function getJwtToken(email, googleId) {
   const payload = {
