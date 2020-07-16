@@ -54,73 +54,11 @@ exports.up = function(knex) {
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
   })
-
-
-  //creating googleUsers Table
-  .createTable("tallyweb.gUsers", gUser => {
-    gUser.increments();
-    gUser.string("google_id")
-    .unique()
-    .notNullable();
-    gUser.string("first_name").notNullable();
-    gUser.string("last_name").notNullable();
-    gUser.string("email")
-    .unique()
-    .notNullable();
-    gUser.json("preferences");
-})
-
-  // creating table for Google users businesses
-  .createTable("tallyweb.gUsers_business", gUsersBusiness => {
-      gUsersBusiness.increments();
-      // Foreign Key - references gUsers Table
-      gUsersBusiness.string("gUser_id")
-      .unsigned()
-      .references("google_id")
-      .inTable("gUsers")
-      .onDelete("CASCADE")
-      .onUpdate("CASCADE");
-
-      // Foreign Key - pointing to DS business table
-      gUsersBusiness.string("business_id")
-      .unsigned()
-      .references("business_id")
-      .inTable("tallyds.business")
-      .onDelete("CASCADE")
-      .onUpdate("CASCADE");
-  })
-
-  // creating table for Google users 'competition' businesses
-  .createTable('tallyweb.gUsers_competitors', gUserComp => {
-    gUserComp.increments();
-
-    // Foreign Key - pointing to gUsers table
-    gUserComp.integer('gUser_id')
-        .unsigned()
-        .references("id")
-        .inTable("gUsers")
-        .onDelete("CASCADE")
-        .onUpdate("CASCADE");
-
-    // Foreign Key - pointing to DS Table 'businesses'
-    gUserComp.string('business_id')
-        .unsigned()
-        .references("business_id")
-        .inTable("tallyds.business")
-        .onDelete("CASCADE")
-        .onUpdate("CASCADE");
-})
-
-
-
 };
 
 exports.down = function(knex) {
   return knex.schema
   .dropTableIfExists('tallyweb.users')
   .dropTableIfExists('tallyweb.users_business')
-  .dropTableIfExists('tallyweb.users_competitors')
-  .dropTableIfExists('tallyweb.gUsers')
-  .dropTableIfExists('tallyweb.gUsers_business')
   .dropTableIfExists('tallyweb.users_competitors')
 };
