@@ -13,27 +13,10 @@ function findBy(filter) {
 async function add(user) {
   const [id] = await db('tallyweb.users').insert(user, 'id');
   return findById(id);
-}
-
-function findByName(first_name) {
-  return db('tallyweb.users')
-    .where({
-      first_name: first_name
-    })
-    .select("id", "email", "password", "preferences");
-}
-
-function findById(id) {
+}function findById(id) {
   return db('tallyweb.users')
     .where({ id })
     .first();
-}
-
-function remove(id) {
-  return db('tallyweb.users')
-    .where({ id })
-    .first()
-    .del();
 }
 
 module.exports = {
@@ -41,6 +24,4 @@ module.exports = {
   find,
   findBy,
   findById,
-  findByName,
-  remove
 }

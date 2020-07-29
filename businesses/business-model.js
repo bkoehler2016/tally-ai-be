@@ -18,11 +18,20 @@ async function findBusinessByID(id) {
   return result.rows
 }
 
+async function searchBusiness(params) {
+  const result = await db('tallyds.business')
+    .select('business_id','name', 'address', 'city', 'zipcode')
+    .where(params)
+  return result
+
+}
+
 
 
 
 
 module.exports = {
 findBusinessByID,
-getBusinessses
+getBusinessses,
+searchBusiness
 }

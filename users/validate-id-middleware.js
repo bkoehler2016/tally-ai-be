@@ -2,9 +2,10 @@ const jwt = require('jsonwebtoken');
 const { getUserId } = require('./users-model')
 
 module.exports = async (req, res, next) => {
+    console.log(req.body);
     const token = req.headers.authorization;
     const decodedJwt = jwt.decode(token);
-    const { id } = await getUserId({ email: decodedJwt.email });
+    const  id  = await getUserId({ email: decodedJwt.email });
 
     if (req.params.id === `${id}`) {
         console.log("Valid");

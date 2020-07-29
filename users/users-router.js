@@ -1,47 +1,32 @@
 const express = require("express");
 
 const Users = require("./users-model");
+const Business = require("../businesses/business-model")
 
 const router = express.Router();
 const helpers = require('./users_helpers');
 
 const middleware = require("./validate-id-middleware");
 
-// CHANGE USER CREDENTIALS
-router.put("/:id", middleware, (req, res) => {
-  res.set('Access-Control-Allow-Origin', '*');
-  const changes = req.body;
-  console.log(`\nPUT changes:\n${changes}\n`);
-  Users.update(req.params.id, changes)
-    .then(user => {
-      if (user) {
-        res.status(200).json(user);
-      } else {
-        res.status(404).json({ message: "Invalid user" });
-      }
-    })
-    .catch(error => {
-      console.log(error);
-      res.status(500).json({ message: "Could not update user", error });
-    });
-});
 
-// DELETE USER
-router.delete("/:id", middleware, (req, res) => {
-  res.set('Access-Control-Allow-Origin', '*');
-  Users.destroy(req.params.id)
-    .then(count => {
-      if (count > 0) {
-        res.status(200).json({ message: "User deleted" });
-      } else {
-        res.status(404).json({ message: "User could not be found" });
-      }
+// Modify User Information
+router.put("/:id", (req, res) => {
+  const changes = req.body
+  const id = parseInt(req.params.id)
+  // console.log(changes);
+  if (!changes) {
+  res.status(400).json({message: 'No Information Provided'})
+  } else {
+    Users.editUser(id, changes)
+    .then(updated => {
+      return res.status(200).json(updated)
     })
     .catch(error => {
       console.log(error);
-      res.status(500).json({ message: "Could not delete user" }, error);
-    });
-});
+      res.status(500).json({error: error})
+    })
+  }
+})
 
 // GET USER INFO
 router.get('/:id', middleware, (req, res) => {
@@ -94,17 +79,16 @@ router.get('/:id/businessinfo', middleware, (req, res) => {
 })
 
 
-// ADD FAVORITE
-// TODO: Return formattedFavorites; need to adjust front end to account for the different format.
 router.post('/:id/favorite', middleware, (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   const id = req.params.id;
+
   Users.addUserCompetition(req.body, id)
+
     .then(async event => {
       try {
         const favorites = await Users.getUserBusinessCompetitionInfo(id);
         const formattedFavorites = helpers.formatBusinesses(favorites);
-        // TODO: Replace favorites: favorites with favorites: formattedFavorites
         res.status(201).json({ event, favorites: favorites, message: "User Favorite posted" });
       } catch (error) {
         console.log(`Error fetching favorites after ins ert:\n${error}\n`);
@@ -117,8 +101,6 @@ router.post('/:id/favorite', middleware, (req, res) => {
     });
 })
 
-// DELETE BUSINESS
-// TODO: Return formattedBusinesses; need to adjust front end to account for the different format.
 router.delete('/:id/business/:bID', middleware, (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   Users.removeUsersBusiness(req.params.bID)
@@ -126,9 +108,7 @@ router.delete('/:id/business/:bID', middleware, (req, res) => {
       if (!event) {
         res.status(404).json({ message: "No User Business exists by that ID!" });
       } else {
-        const businesses = await Users.getBusinesses(req.params.id);
-        const formattedBusinesses = helpers.formatBusinesses(businesses);
-        // TODO: Replace businesses: businesses with businesses: formattedBusinesses
+        const businesses = await Business.searchBusinesses(req.params.id);
         res.status(200).json({ businesses: businesses, message: "User Business Deleted" });
       }
     })
@@ -138,8 +118,7 @@ router.delete('/:id/business/:bID', middleware, (req, res) => {
     });
 });
 
-// DELETE FAVORITE
-// TODO: Return formattedFavorites; need to adjust front end to account for the different format.
+
 router.delete('/:id/favorite/:bID', middleware, (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   Users.removeUsersCompetition(req.params.bID)
@@ -147,9 +126,6 @@ router.delete('/:id/favorite/:bID', middleware, (req, res) => {
       if (!event) {
         res.status(404).json({ message: "No User Business exists by that ID!" });
       } else {
-        const favorites = await Users.getFavorites(req.params.id);
-        const formattedFavorites = helpers.formatBusinesses(favorites);
-        // TODO: Replace favorites: favorites with favorites: formattedFavorites
         res.status(200).json({ favorites: favorites, message: "User Favorite Deleted" });
       }
     })
@@ -158,5 +134,8 @@ router.delete('/:id/favorite/:bID', middleware, (req, res) => {
       res.status(500).json(err);
     });
 });
+
+
+
 
 module.exports = router;
