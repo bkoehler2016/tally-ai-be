@@ -7,6 +7,7 @@ const authRouter = require("../auth/auth-router");
 const usersRouter = require("../users/users-router");
 const googleRouter = require('../google/google-router');
 const businessRouter = require('../businesses/business-router')
+const searchRouter = require('../search/search-router')
 
 // CUSTOM MIDDLEWARE
 const authMiddleware = require("../auth/authenticate-middleware");
@@ -35,6 +36,7 @@ server.use("/api/auth", authRouter);
 server.use("/api/users", authMiddleware, usersRouter);
 server.use('/api/business', authMiddleware, businessRouter)
 server.use('/api/google', googleRouter);
+server.use('/api/search', searchRouter)
 
 server.get('/', (req, res) => {
     res.status(200).json(`Sanity Check`);
