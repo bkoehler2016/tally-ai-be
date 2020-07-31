@@ -36,7 +36,8 @@ router.get('/:id', middleware, async (req, res) => {
 })
 
 // Search business by Name and City
-router.post('/search', middleware, (req, res) => {
+//TODO: refactor to use query string, and remove middleware for auth check
+router.post('/search', (req, res) => {
   Businesses.searchBusiness(req.body)
   .then(business => {
     if(!business) {
@@ -47,5 +48,8 @@ router.post('/search', middleware, (req, res) => {
     }
   })
 })
+
+//upload images to S3 and store imageURL in database
+
 
 module.exports = router
