@@ -19,9 +19,13 @@ async function findBusinessByID(id) {
 }
 
 async function searchBusiness(params) {
+  const {name, city} = params
+  console.log(name);
+  console.log(city);
   const result = await db('tallyds.business')
     .select('business_id','name', 'address', 'city', 'zipcode')
-    .where(params)
+    .where('name', 'ilike', name)
+    .andWhere('city', 'ilike', city)
   return result
 
 }
