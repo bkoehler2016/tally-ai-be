@@ -29,7 +29,7 @@ router.put("/:id", (req, res) => {
 })
 
 // GET USER INFO
-router.get('/:id', middleware, (req, res) => {
+router.get('/:id', (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   const { id } = req.params;
   Users.getUsers(id)
@@ -41,7 +41,7 @@ router.get('/:id', middleware, (req, res) => {
 });
 
 // ADD BUSINESS
-router.post('/:id/business', middleware, (req, res) => {
+router.post('/:id/business', (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   const id = req.params.id;
   if(!req.body.business_id){
@@ -65,7 +65,7 @@ router.post('/:id/business', middleware, (req, res) => {
 })
 
 // GET USERS BUSINESS WITH DETAILS
-router.get('/:id/businessinfo', middleware, (req, res) => {
+router.get('/:id/businessinfo', (req, res) => {
   res.set('Access-Control-Allow-Origin', '*')
   const id = req.params.id
   Users.getUserBusinessInfo(id)
@@ -79,7 +79,7 @@ router.get('/:id/businessinfo', middleware, (req, res) => {
 })
 
 
-router.post('/:id/favorite', middleware, (req, res) => {
+router.post('/:id/favorite',  (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   const id = req.params.id;
 
@@ -101,7 +101,7 @@ router.post('/:id/favorite', middleware, (req, res) => {
     });
 })
 
-router.delete('/:id/business/:bID', middleware, (req, res) => {
+router.delete('/:id/business/:bID', (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   Users.removeUsersBusiness(req.params.bID)
     .then(async event => {
@@ -119,7 +119,7 @@ router.delete('/:id/business/:bID', middleware, (req, res) => {
 });
 
 
-router.delete('/:id/favorite/:bID', middleware, (req, res) => {
+router.delete('/:id/favorite/:bID', (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   Users.removeUsersCompetition(req.params.bID)
     .then(async event => {

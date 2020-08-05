@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const { getUserId } = require('./users-model')
 
 module.exports = async (req, res, next) => {
+    const body = req.body
     console.log(req.body);
     const token = req.headers.authorization;
     const decodedJwt = jwt.decode(token);
