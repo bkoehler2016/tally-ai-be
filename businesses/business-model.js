@@ -18,20 +18,32 @@ async function findBusinessByID(id) {
   return result.rows
 }
 
-async function searchBusiness(params) {
+async function searchBusiness(name, city, cuisine) {
   const result = await db('tallyds.business')
-    .select('business_id','name', 'address', 'city', 'zipcode')
-    .where(params)
+    .select('business_id','name', 'address', 'city', 'zipcode', 'cuisine', 'review_count', 'business_stars')
+    .where("name", 'ilike', `%${name}%`)
+    .andWhere('city', 'ilike', `%${city}%`)
+    .andWhere('cuisine', 'ilike', `%${cuisine}%`)
   return result
-
 }
 
+async function searchBusinessByName(name) {
+  const result = await db('tallyds.business')
+    .select('*')
+    .where("name", "ilike", `${name}%`).limit(10)
+  return result
+}
 
-
-
+async function searchAllBusinessName() {
+  const result = await db("tallyds.business")
+    .select('name').orderBy("name")
+  return result
+}
 
 module.exports = {
 findBusinessByID,
 getBusinessses,
-searchBusiness
+searchBusiness,
+searchBusinessByName,
+searchAllBusinessName
 }

@@ -10,7 +10,7 @@ const middleware = require("./validate-id-middleware");
 
 
 // Modify User Information
-router.put("/:id", (req, res) => {
+router.put("/:id", middleware, (req, res) => {
   const changes = req.body
   const id = parseInt(req.params.id)
   // console.log(changes);
@@ -29,7 +29,7 @@ router.put("/:id", (req, res) => {
 })
 
 // GET USER INFO
-router.get('/:id', (req, res) => {
+router.get('/:id', middleware, (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   const { id } = req.params;
   Users.getUsers(id)
@@ -41,7 +41,7 @@ router.get('/:id', (req, res) => {
 });
 
 // ADD BUSINESS
-router.post('/:id/business', (req, res) => {
+router.post('/:id/business', middleware, (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   const id = req.params.id;
   if(!req.body.business_id){
@@ -64,22 +64,25 @@ router.post('/:id/business', (req, res) => {
   }
 })
 
-// GET USERS BUSINESS WITH DETAILS
-router.get('/:id/businessinfo', (req, res) => {
+// GET USERS BUSINESS & COMPETITORS WITH DETAILS
+router.get('/:id/businesses', middleware, async (req, res) => {
   res.set('Access-Control-Allow-Origin', '*')
   const id = req.params.id
-  Users.getUserBusinessInfo(id)
-    .then(businesses => {
-      if(!businesses) {
-        res.status(404).json({error: 'No businesses for this user'})
-      } else {
-        res.status(200).json({message: "Success", data: businesses})
-      }
-    })
+  try {
+    const businesses = await Users.getUserBusinessInfo(id);
+    const competitors = await Users.getUserBusinessCompetitionInfo(id);
+    
+    res.status(201).json({businesses, competitors})
+  } catch (error) {
+    res.status(500).json({message: "Error returning businesses", error})
+  }
+
+
 })
 
 
-router.post('/:id/favorite',  (req, res) => {
+
+router.post('/:id/favorite', middleware,  (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   const id = req.params.id;
 
@@ -101,15 +104,14 @@ router.post('/:id/favorite',  (req, res) => {
     });
 })
 
-router.delete('/:id/business/:bID', (req, res) => {
+router.delete('/:id/business/:bID', middleware, (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   Users.removeUsersBusiness(req.params.bID)
     .then(async event => {
       if (!event) {
         res.status(404).json({ message: "No User Business exists by that ID!" });
       } else {
-        const businesses = await Business.searchBusinesses(req.params.id);
-        res.status(200).json({ businesses: businesses, message: "User Business Deleted" });
+        res.status(200).json({ business_id: req.params.bID, message: "User Business Deleted" });
       }
     })
     .catch(err => {
@@ -119,14 +121,14 @@ router.delete('/:id/business/:bID', (req, res) => {
 });
 
 
-router.delete('/:id/favorite/:bID', (req, res) => {
+router.delete('/:id/favorite/:bID', middleware, (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   Users.removeUsersCompetition(req.params.bID)
     .then(async event => {
       if (!event) {
         res.status(404).json({ message: "No User Business exists by that ID!" });
       } else {
-        res.status(200).json({ favorites: favorites, message: "User Favorite Deleted" });
+        res.status(200).json({ favorite_id: req.params.bID, message: "User Favorite Deleted" });
       }
     })
     .catch(err => {

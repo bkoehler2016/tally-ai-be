@@ -6,20 +6,23 @@ const formatUserData = data => {
         first_name: data.first_name,
         last_name: data.last_name,
         preferences: data.preferences,
+        type: data.type,
         businesses: data.businesses.length
             ? data.businesses.map(business => ({
-                id: business.id,
+                business_id: business.business_id,
                 name: business.name,
                 city: business.city,
-                state: business.state,
+                address: business.address,
+                zipcode: business.zipcode,
             }))
             : [],
-        favorites: data.competition.length
+        competitors: data.competition.length
             ? data.competition.map(competition => ({
-                id: competition.id,
+                business_id: competition.business_id,
                 name: competition.name,
                 city: competition.city,
-                state: competition.state,
+                address: business.address,
+                zipcode: business.zipcode,
             }))
             : []
     };
