@@ -3,20 +3,13 @@ const Businesses = require('../businesses/business-model')
 const router = express.Router()
 
 
-// Search business by Name and City
-//TODO: refactor to use query string, and remove middleware for auth check
-
+// Search business by Name , City, Cuisine
 
 router.get('/', (req, res) => {
 
-  // console.log("name" in req.query)
-  // console.log(Object.keys(req.query)[0])
-  // console.log(Object.keys(req.query)[1])
   var name = "name" in req.query ? req.query.name : "";
   var city = "city" in req.query ? req.query.city : "";
   var cuisine = "cuisine" in req.query ? req.query.cuisine : "";
-
-  console.log(name, city, cuisine)
 
   Businesses.searchBusiness(name, city, cuisine)
   .then(business => {
@@ -33,7 +26,7 @@ router.get('/', (req, res) => {
 })
 
 
-// Return all business names only in array.
+// Return all business names in an array.
 router.get('/names',(req,res) => {
 
   Businesses.searchAllBusinessName()
@@ -45,24 +38,21 @@ router.get('/names',(req,res) => {
     })
 })
 
-
-router.get("/business", (req,res) => {
-  const {name} = req.query;
-  if(!name){
-    res.status(404).json({message: "Please include business name."})
-    return
-  }
-  Businesses.searchBusinessByName(name)
+//Return All business info by id
+router.get("/:id", (req,res) => {
+  const {id} = req.params;
+  Businesses.findBusinessByID(id)
     .then(business => {
-      if( business.length > 1){
+      const businessFound = business[0]
+      if(businessFound){
 
-        res.status(200).json(business[0])
+        res.status(201).json(businessFound)
       } else {
-        res.status(404).json({message: "No business found"})
+        res.status(404).json({message: "No restaurant found"})
       }
     })
     .catch(err =>{
-      res.status(500).json({message: "Error returning business", err})
+      res.status(500).json({error: "Error returning business"})
     })
 })
 

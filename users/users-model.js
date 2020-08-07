@@ -104,11 +104,12 @@ function getUserBusinessCompetitionInfo(id) {
 
 async function addUserBusiness(user_id, business_id) {
   await db('tallyweb.users_business').insert({  user_id,  business_id })
-  return ({ user_id, business_id });
+  return getUserBusinessInfo(user_id);
 }
 
 async function addUserCompetition(user_id, business_id) {
   await db('tallyweb.users_competitors').insert ({user_id, business_id})
+  return getUserBusinessCompetitionInfo(user_id)
 }
 
 

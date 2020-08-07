@@ -14,6 +14,9 @@ const formatUserData = data => {
                 city: business.city,
                 address: business.address,
                 zipcode: business.zipcode,
+                review_count: business.review_count,
+                cuisine: business.cuisine,
+                business_stars: business.business_stars
             }))
             : [],
         competitors: data.competition.length
@@ -21,8 +24,11 @@ const formatUserData = data => {
                 business_id: competition.business_id,
                 name: competition.name,
                 city: competition.city,
-                address: business.address,
-                zipcode: business.zipcode,
+                address: competition.address,
+                zipcode: competition.zipcode,
+                review_count: competition.review_count,
+                cuisine: competition.cuisine,
+                business_stars: competition.business_stars
             }))
             : []
     };

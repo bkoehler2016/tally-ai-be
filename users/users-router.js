@@ -49,11 +49,11 @@ router.post('/:id/business', middleware, (req, res) => {
   } else {
   const bizId = req.body.business_id
   Users.addUserBusiness(id, bizId)
-    .then(business => {
-      if(!business){
+    .then(businesses => {
+      if(!businesses){
         res.status(400).json({error: "Business not added"})
       } else {
-        res.status(201).json({message: 'Added', Data: business})
+        res.status(201).json({message: 'Added', businesses: businesses})
       }
     })
     .catch(error => {
@@ -85,23 +85,22 @@ router.get('/:id/businesses', middleware, async (req, res) => {
 router.post('/:id/favorite', middleware,  (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   const id = req.params.id;
-
-  Users.addUserCompetition(req.body, id)
-
-    .then(async event => {
-      try {
-        const favorites = await Users.getUserBusinessCompetitionInfo(id);
-        const formattedFavorites = helpers.formatBusinesses(favorites);
-        res.status(201).json({ event, favorites: favorites, message: "User Favorite posted" });
-      } catch (error) {
-        console.log(`Error fetching favorites after ins ert:\n${error}\n`);
-        res.status(404).json({ error, message: "Error fetching favorites after insert." });
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ err, message: "User Favorite failed to post" });
-    });
+  if(!req.body.business_id){
+    res.status(401).json({error: 'Please include the business ID'})
+  } else {
+    Users.addUserCompetition( id, req.body.business_id)
+      .then(competitors => {
+        if(!competitors){
+          res.status(400).json({error: "Business not added"})
+        } else {
+          res.status(201).json({message: 'Added', competitors: competitors})
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({ err, message: "User Favorite failed to post" });
+      });
+  }
 })
 
 router.delete('/:id/business/:bID', middleware, (req, res) => {
@@ -128,7 +127,7 @@ router.delete('/:id/favorite/:bID', middleware, (req, res) => {
       if (!event) {
         res.status(404).json({ message: "No User Business exists by that ID!" });
       } else {
-        res.status(200).json({ favorite_id: req.params.bID, message: "User Favorite Deleted" });
+        res.status(200).json({ competitor_id: req.params.bID, message: "User Favorite Deleted" });
       }
     })
     .catch(err => {
