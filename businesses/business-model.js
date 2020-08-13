@@ -1,6 +1,8 @@
 const db = require('../database/dbConfig');
 const knex = require('knex')
 const bcrypt = require('bcryptjs')
+const multer = require('multer')
+const AWS = require('aws-sdk')
 
 
 const getBusinessses = async () => {
@@ -20,7 +22,7 @@ async function findBusinessByID(id) {
 
 async function searchBusiness(name, city, cuisine) {
   const result = await db('tallyds.business')
-    .select('business_id','name', 'address', 'city', 'zipcode', 'cuisine', 'review_count', 'business_stars')
+    .select('business_id','name', 'address', 'city', 'zipcode', 'cuisine', 'review_count', 'business_stars', 'image_url')
     .where("name", 'ilike', `%${name}%`)
     .andWhere('city', 'ilike', `%${city}%`)
     .andWhere('cuisine', 'ilike', `%${cuisine}%`)
@@ -40,10 +42,18 @@ async function searchAllBusinessName() {
   return result
 }
 
+async function updateImage(id, fileName) {
+  const url = `https://tally-ai-image-store.s3.amazonaws.com/${fileName}`
+  console.log(url)
+  await db('tallyds.business').update({image_url: url}).where({business_id: id})
+  return url
+}
+
 module.exports = {
 findBusinessByID,
 getBusinessses,
 searchBusiness,
 searchBusinessByName,
-searchAllBusinessName
+searchAllBusinessName,
+updateImage
 }
