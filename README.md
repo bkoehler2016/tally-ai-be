@@ -16,6 +16,14 @@
 | [<img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15">](https://www.linkedin.com/in/hurshd) |
 
 ### Web Development (LABSPT 11)
+  [Benjamin Koehler](http://github.com/patjonstevenson)                                        |                                       [Adrian Parra](http://github.com/steverenner1)                                        |                                       [Raudel Flores](https://github.com/Turtled)                                        |                                       [Daniel Morales](http://github.com/Gatrrr)                      
+| :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: |
+|                      [<img src="https://i.ibb.co/891s4yF/T4-JUEB3-ME-UJB1-REJ0-K-352ea65be2c5-512.jpg" width = "200" />](https://github.com/patjonstevenson)                       |                      [<img src="https://i.ibb.co/cvZhx8s/T4-JUEB3-ME-ULM4-H6-FJP-e22eb325f93c-512.jpg" width = "200" />](https://github.com/steverenner1)                       |                      [<img src="https://i.ibb.co/mh3JSTz/T4-JUEB3-ME-ULP37-SQ65-8dc869b04d13-512.jpg" width = "200" />](https://github.com/Turtled)                       |                      [<img src="https://i.ibb.co/MSq1Jhq/T4-JUEB3-ME-ULPAHPVPT-a30231215728-512.jpg" width = "200" />](https://github.com/Gatrrr)                       |
+|                 [<img src="https://github.com/favicon.ico" width="15"> ](http://github.com/patjonstevenson)                 |            [<img src="https://github.com/favicon.ico" width="15"> ](http://github.com/steverenner1)             |           [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/Turtled)            |          [<img src="https://github.com/favicon.ico" width="15"> ](https://github.com/Gatrrr)           | 
+| [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](http://linkedin.com/in/patjstevenson/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](http://www.linkedin.com/in/steverenner1) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/daniel-firpo/) | [ <img src="https://static.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca" width="15"> ](https://www.linkedin.com/in/david-downes-a71216194/) | 
+
+|                                       [Michael Phelps](http://phelpsweb.dev)                      
+| 
 
 
 ### Previous Product Manager (LABS 19)

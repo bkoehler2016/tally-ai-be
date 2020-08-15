@@ -24,7 +24,6 @@ router.get('/', (req, res) => {
 router.post("/register", async (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   const user = req.body;
-  console.log(user);
 
 
   const { isSuccessful, errors } = await validateUser(user);

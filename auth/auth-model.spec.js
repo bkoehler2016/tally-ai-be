@@ -1,73 +1,76 @@
 const request = require('supertest');
-
 const server = require('../api/server');
-
 const db = require('../database/dbConfig');
+const { goodRegistration, goodLogin, badLogin, badRegistration } = require('../test_params/index');
 
-describe('CRUD Tests', () => {
+
+describe('Successful Auth-Router Tests', () => {
   beforeAll(async () => {
     await db.raw('TRUNCATE TABLE users RESTART IDENTITY CASCADE')
   });
 
-  it("tests are running with DB_ENV set to 'testing'", () => {
-    expect(process.env.ENVIRONMENT).toBe("testing");
+  it("tests are running with DB_ENV set to 'production'", () => {
+    expect(process.env.ENVIRONMENT).toBe("production");
   });
 
-  describe("auth-router tests", () => {
+  describe("registration", () => {
     describe("POST /api/auth/register", () => {
-      it("should return a 201 created status", () => {
+      it("should return a 201 created status and a JSON type", () => {
         return request(server)
           .post("/api/auth/register")
-          .send({
-            first_name: "first",
-            last_name: "last",
-            email: "robert2@email.com",
-            password: "password",
-          })
+          .send(goodRegistration)
           .then(res => {
             expect(res.status).toBe(200);
-          });
-      });
-      it("should return a JSON object after creating a user", () => {
-        return request(server)
-          .post("/api/auth/register")
-          .send({
-            username: "Dave",
-            password: "pass",
-            isServiceWorker: 1
-          })
-          .then(res => {
             expect(res.type).toEqual("application/json");
           });
       });
     });
   })
 
-  describe("POST /api/auth/login", () => {
-    it("should return a 200 OK status", () => {
+  describe("login", () => {
+    it("should return a 200 OK status and a JSON type", () => {
       return request(server)
         .post("/api/auth/login")
-        .send({
-          username: "Dave",
-          password: "pass",
-          isServiceWorker: 1
-        })
+        .send(goodLogin)
         .then(res => {
           expect(res.status).toBe(200);
-        });
-    });
-    it("should return a JSON object", () => {
-      return request(server)
-        .post("/api/auth/login")
-        .send({
-          username: "Dave",
-          password: "pass",
-          isServiceWorker: 1
-        })
-        .then(res => {
-          expect(res.type).toMatch(/json/);
+          expect(res.type).toEqual('application/json');
         });
     });
   });
+})
+describe('Unuccessful Auth-Router Tests', () => {
+  beforeAll(async () => {
+    await db.raw('TRUNCATE TABLE users RESTART IDENTITY CASCADE')
+  });
 
+  it("tests are running with DB_ENV set to 'production'", () => {
+    expect(process.env.ENVIRONMENT).toBe("production");
+  });
+
+  describe("registration", () => {
+    describe("POST /api/auth/register", () => {
+      it("should return a 401 not found status and a JSON type", () => {
+        return request(server)
+          .post("/api/auth/register")
+          .send(badRegistration)
+          .then(res => {
+            expect(res.status).toBe(400);
+            expect(res.type).toEqual("application/json");
+          });
+      });
+    });
+  })
+
+  describe("login", () => {
+    it("should return a 400 Invalid status and a JSON type", () => {
+      return request(server)
+        .post("/api/auth/login")
+        .send(goodLogin)
+        .then(res => {
+          expect(res.status).toBe(401);
+          expect(res.type).toEqual('application/json');
+        });
+    });
+  });
 })

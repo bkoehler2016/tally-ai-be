@@ -7,6 +7,8 @@ module.exports = {
 };
 
 async function validateUser(user) {
+    console.log(user);
+    const {first_name, last_name, email, password} = user
     let errors = [];
 
     // Check for valid password
@@ -23,7 +25,7 @@ async function validateUser(user) {
     }
 
     // Check to see if email already exists in DB
-    const oldUser = await Users.findBy({ email: user.email });
+    const oldUser = await Users.findBy({email});
     const emailExists = oldUser.length > 0;
     console.log(emailExists);
     if (emailExists) {

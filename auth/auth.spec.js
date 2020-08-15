@@ -19,8 +19,8 @@ describe('CRUD Tests', () => {
     await db.raw('TRUNCATE users RESTART IDENTITY CASCADE')
   });
 
-  it("tests are running with DB_ENV set to 'testing'", () => {
-    expect(process.env.ENVIRONMENT).toBe("testing");
+  it("tests are running with DB_ENV set to 'production'", () => {
+    expect(process.env.ENVIRONMENT).toBe("production");
   });
 
   describe("auth-router tests", () => {
